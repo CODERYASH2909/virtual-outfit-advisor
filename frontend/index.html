@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Outfit Advisor — Dress Smarter, Every Day</title>
+  <meta name="description" content="Digitize your wardrobe, get smart outfit recommendations, and plan travel packing lists with real weather data. No AI, no noise — just your clothes, styled beautifully." />
+  <link rel="stylesheet" href="/public/assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-cream-50">
+
+  <!-- Nav -->
+  <header class="sticky top-0 z-50 border-b border-gray-100/60 bg-white/70 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-2.5">
+        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-voa-950 text-white font-display font-bold text-lg">V</div>
+        <span class="font-display text-xl text-ink-900">VOA</span>
+      </div>
+      <nav class="hidden items-center gap-8 text-sm font-medium text-gray-500 md:flex">
+        <a href="#features" class="transition-colors hover:text-voa-800">Features</a>
+        <a href="#how-it-works" class="transition-colors hover:text-voa-800">How It Works</a>
+        <a href="#faq" class="transition-colors hover:text-voa-800">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="/pages/login.html" class="btn-secondary !px-4 !py-2 text-sm">Log In</a>
+        <a href="/pages/register.html" data-cta-auth class="btn-primary !px-4 !py-2 text-sm">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero — Split Layout -->
+  <section class="bg-hero-gradient relative overflow-hidden">
+    <!-- Decorative circles -->
+    <div class="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-voa-200/30 blur-3xl"></div>
+    <div class="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-cream-200/50 blur-3xl"></div>
+
+    <div class="mx-auto max-w-7xl px-6 py-20 lg:py-28">
+      <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <!-- Left — Marketing -->
+        <div class="animate-fade-in-up">
+          <span class="badge mb-6">✨ Personal wardrobe, not shopping</span>
+          <h1 class="mb-6 font-display text-5xl leading-tight text-ink-900 md:text-6xl lg:text-[3.5rem]">
+            Virtual Outfit<br>Advisor
+          </h1>
+          <p class="mb-8 max-w-lg text-lg text-gray-500 leading-relaxed">
+            Digitize your own clothes, build outfits from what you already own, and plan travel packing without product links or e-commerce noise.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <div class="feature-chip animate-fade-in-up animate-delay-100">
+              <span class="feature-chip-icon">✓</span>
+              Wardrobe
+            </div>
+            <div class="feature-chip animate-fade-in-up animate-delay-200">
+              <span class="feature-chip-icon">✓</span>
+              Outfits
+            </div>
+            <div class="feature-chip animate-fade-in-up animate-delay-300">
+              <span class="feature-chip-icon">✓</span>
+              Travel
+            </div>
+          </div>
+        </div>
+
+        <!-- Right — Auth Card -->
+        <div class="animate-fade-in-up animate-delay-200">
+          <div class="mx-auto max-w-md rounded-2xl bg-white p-8 shadow-card border border-gray-100/80">
+            <!-- Tab toggle -->
+            <div class="mb-6 flex gap-2 rounded-lg bg-gray-100 p-1">
+              <a href="/pages/register.html" class="auth-tab auth-tab-active">Create Account</a>
+              <a href="/pages/login.html" class="auth-tab auth-tab-inactive">Sign In</a>
+            </div>
+
+            <form id="hero-register-form" class="space-y-4">
+              <div>
+                <label class="label" for="hero-name">Name</label>
+                <input type="text" id="hero-name" class="input-field" placeholder="Jane Doe" />
+              </div>
+              <div>
+                <label class="label" for="hero-email">Email</label>
+                <input type="email" id="hero-email" class="input-field" placeholder="you@example.com" />
+              </div>
+              <div>
+                <label class="label" for="hero-password">Password</label>
+                <input type="password" id="hero-password" class="input-field" placeholder="••••••••" />
+              </div>
+              <button type="submit" class="btn-primary w-full">Start Styling</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="mx-auto max-w-7xl px-6 py-20">
+    <div class="mb-14 text-center">
+      <h2 class="mb-3 text-3xl font-bold text-ink-900">Everything you need to manage your style</h2>
+      <p class="text-gray-500">Simple, focused tools — no clutter, no complexity.</p>
+    </div>
+    <div class="grid gap-6 md:grid-cols-3">
+      <div class="card animate-fade-in-up">
+        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-voa-100 text-voa-700 text-lg">👗</div>
+        <h3 class="mb-2 text-lg font-semibold text-ink-900">Digital Wardrobe</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Upload, tag, and organize every piece you own. Search and filter by category, color, season, and occasion in seconds.</p>
+      </div>
+      <div class="card animate-fade-in-up animate-delay-100">
+        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-voa-100 text-voa-700 text-lg">✨</div>
+        <h3 class="mb-2 text-lg font-semibold text-ink-900">Smart Recommendations</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Get outfit pairings generated from your own wardrobe using simple, transparent rules — matched to season and occasion.</p>
+      </div>
+      <div class="card animate-fade-in-up animate-delay-200">
+        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-voa-100 text-voa-700 text-lg">✈️</div>
+        <h3 class="mb-2 text-lg font-semibold text-ink-900">Travel Planner</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Enter your destination and dates — VOA pulls real weather data and builds a packing list and outfit plan automatically.</p>
+      </div>
+      <div class="card animate-fade-in-up animate-delay-100">
+        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-voa-100 text-voa-700 text-lg">❤️</div>
+        <h3 class="mb-2 text-lg font-semibold text-ink-900">Favorites &amp; History</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Save the outfit combinations you love and revisit your full recommendation history any time.</p>
+      </div>
+      <div class="card animate-fade-in-up animate-delay-200">
+        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-voa-100 text-voa-700 text-lg">👤</div>
+        <h3 class="mb-2 text-lg font-semibold text-ink-900">Personal Profile</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Set your style preferences, manage your account, and keep your wardrobe data private and secure.</p>
+      </div>
+      <div class="card animate-fade-in-up animate-delay-300">
+        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-voa-100 text-voa-700 text-lg">⚡</div>
+        <h3 class="mb-2 text-lg font-semibold text-ink-900">Clean &amp; Fast</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Built with a lightweight, modern stack for a fast, responsive experience on any device.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how-it-works" class="bg-voa-950 py-20 text-white">
+    <div class="mx-auto max-w-7xl px-6">
+      <h2 class="mb-14 text-center text-3xl font-bold">How VOA works</h2>
+      <div class="grid gap-10 md:grid-cols-3">
+        <div class="text-center animate-fade-in-up">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-voa-600 font-display text-xl font-bold shadow-glow">1</div>
+          <h3 class="mb-2 text-lg font-semibold">Build your wardrobe</h3>
+          <p class="text-sm text-voa-200">Upload photos and details of your clothing items.</p>
+        </div>
+        <div class="text-center animate-fade-in-up animate-delay-100">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-voa-600 font-display text-xl font-bold shadow-glow">2</div>
+          <h3 class="mb-2 text-lg font-semibold">Get suggestions</h3>
+          <p class="text-sm text-voa-200">Generate outfit ideas by season and occasion, or plan a trip with weather-based packing lists.</p>
+        </div>
+        <div class="text-center animate-fade-in-up animate-delay-200">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-voa-600 font-display text-xl font-bold shadow-glow">3</div>
+          <h3 class="mb-2 text-lg font-semibold">Save your favorites</h3>
+          <p class="text-sm text-voa-200">Keep track of outfits you love and revisit your history any time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="mx-auto max-w-3xl px-6 py-20">
+    <h2 class="mb-10 text-center text-3xl font-bold text-ink-900">Frequently asked questions</h2>
+    <div class="space-y-4">
+      <details class="card group">
+        <summary class="cursor-pointer font-medium text-ink-900 transition-colors group-open:text-voa-800">Does VOA use AI or machine learning?</summary>
+        <p class="mt-3 text-sm text-gray-500 leading-relaxed">No. VOA uses simple, transparent rule-based logic to match colors, seasons, and occasions from your own wardrobe — no ML models or computer vision.</p>
+      </details>
+      <details class="card group">
+        <summary class="cursor-pointer font-medium text-ink-900 transition-colors group-open:text-voa-800">What weather data does the Travel Planner use?</summary>
+        <p class="mt-3 text-sm text-gray-500 leading-relaxed">The Travel Planner uses a single weather API to fetch real forecast data for your destination and generates packing suggestions accordingly.</p>
+      </details>
+      <details class="card group">
+        <summary class="cursor-pointer font-medium text-ink-900 transition-colors group-open:text-voa-800">Is my wardrobe data private?</summary>
+        <p class="mt-3 text-sm text-gray-500 leading-relaxed">Yes. Every wardrobe item, outfit, and recommendation is scoped strictly to your account.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer class="border-t border-gray-100 bg-white/50 py-10 text-center text-sm text-gray-400">
+    &copy; 2026 Virtual Outfit Advisor. Built with Django &amp; TypeScript.
+  </footer>
+
+  <script type="module" src="/public/assets/js/pages/landing.js"></script>
+</body>
+</html>

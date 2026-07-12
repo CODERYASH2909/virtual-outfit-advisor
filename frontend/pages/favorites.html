@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Favorites — Virtual Outfit Advisor</title>
+  <link rel="stylesheet" href="/public/assets/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <aside id="sidebar-mount" class="hidden w-64 flex-shrink-0 border-r border-gray-100 bg-white p-5 lg:block"></aside>
+
+    <main class="flex-1 p-6 md:p-10">
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold text-ink-900">Favorites</h1>
+        <p class="text-sm text-gray-500">Outfits and recommendations you've saved for later.</p>
+      </div>
+
+      <div id="favorites-grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </main>
+  </div>
+
+  <script type="module" src="/public/assets/js/pages/favorites.js"></script>
+</body>
+</html>

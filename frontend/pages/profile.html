@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — Virtual Outfit Advisor</title>
+  <link rel="stylesheet" href="/public/assets/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <aside id="sidebar-mount" class="hidden w-64 flex-shrink-0 border-r border-gray-100 bg-white p-5 lg:block"></aside>
+
+    <main class="flex-1 p-6 md:p-10">
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold text-ink-900">Your Profile</h1>
+        <p class="text-sm text-gray-500">Manage your account details and style preferences.</p>
+      </div>
+
+      <div class="grid gap-8 lg:grid-cols-2">
+        <div class="card">
+          <h2 class="mb-4 text-lg font-semibold text-ink-900">Personal Information</h2>
+          <form id="profile-form" class="space-y-4">
+            <div>
+              <label class="label" for="avatar">Profile photo</label>
+              <input type="file" id="avatar" accept="image/*" class="input-field" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="label" for="first_name">First name</label>
+                <input type="text" id="first_name" class="input-field" />
+              </div>
+              <div>
+                <label class="label" for="last_name">Last name</label>
+                <input type="text" id="last_name" class="input-field" />
+              </div>
+            </div>
+            <div>
+              <label class="label" for="email">Email (read only)</label>
+              <input type="email" id="email" class="input-field bg-gray-50" disabled />
+            </div>
+            <div>
+              <label class="label" for="phone_number">Phone number</label>
+              <input type="text" id="phone_number" class="input-field" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="label" for="city">City</label>
+                <input type="text" id="city" class="input-field" />
+              </div>
+              <div>
+                <label class="label" for="country">Country</label>
+                <input type="text" id="country" class="input-field" />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="label" for="gender">Gender</label>
+                <select id="gender" class="input-field">
+                  <option value="prefer_not_to_say">Prefer not to say</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label class="label" for="date_of_birth">Date of birth</label>
+                <input type="date" id="date_of_birth" class="input-field" />
+              </div>
+            </div>
+            <div>
+              <label class="label" for="style_preference">Style preference</label>
+              <select id="style_preference" class="input-field">
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+                <option value="streetwear">Streetwear</option>
+                <option value="business">Business</option>
+                <option value="sporty">Sporty</option>
+                <option value="bohemian">Bohemian</option>
+                <option value="minimalist">Minimalist</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-primary w-full">Save Changes</button>
+          </form>
+        </div>
+
+        <div class="card h-fit">
+          <h2 class="mb-4 text-lg font-semibold text-ink-900">Change Password</h2>
+          <form id="password-form" class="space-y-4">
+            <div>
+              <label class="label" for="old_password">Current password</label>
+              <input type="password" id="old_password" required class="input-field" />
+            </div>
+            <div>
+              <label class="label" for="new_password">New password</label>
+              <input type="password" id="new_password" required class="input-field" />
+            </div>
+            <button type="submit" class="btn-primary w-full">Update Password</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/public/assets/js/pages/profile.js"></script>
+</body>
+</html>

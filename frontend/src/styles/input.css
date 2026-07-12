@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream-50 text-ink-900 font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  /* ── Buttons ──────────────────────────────────── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-voa-950 px-6 py-3 text-sm font-semibold text-white shadow-premium transition-all duration-300 hover:bg-voa-800 hover:shadow-card-hover hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-voa-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-ink-900 transition-all duration-300 hover:border-voa-400 hover:text-voa-800 hover:shadow-card hover:-translate-y-0.5;
+  }
+
+  /* ── Cards ────────────────────────────────────── */
+  .card {
+    @apply rounded-xl2 bg-white/80 backdrop-blur-sm p-6 shadow-card border border-gray-100/80 transition-all duration-300;
+  }
+  .card:hover {
+    @apply shadow-card-hover;
+  }
+
+  /* ── Inputs ───────────────────────────────────── */
+  .input-field {
+    @apply w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-ink-900 placeholder-gray-400 transition-all duration-200 focus:border-voa-500 focus:outline-none focus:ring-2 focus:ring-voa-100 focus:shadow-glow;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink-700;
+  }
+
+  /* ── Sidebar ──────────────────────────────────── */
+  .sidebar-link {
+    @apply flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-500 transition-all duration-200 hover:bg-voa-50 hover:text-voa-800;
+  }
+  .sidebar-link-active {
+    @apply bg-voa-50 text-voa-800 font-semibold;
+  }
+
+  /* ── Badge ────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-voa-50 border border-voa-200 px-3 py-1 text-xs font-medium text-voa-800;
+  }
+
+  /* ── Gradient Backgrounds ─────────────────────── */
+  .bg-hero-gradient {
+    background: linear-gradient(135deg, #e8f5f0 0%, #f0fdfa 25%, #fefcf9 50%, #fef7ed 75%, #fdefd6 100%);
+  }
+  .bg-auth-gradient {
+    background: linear-gradient(160deg, #e8f5f0 0%, #f0fdfa 40%, #fefcf9 100%);
+  }
+  .bg-app-gradient {
+    background: linear-gradient(180deg, #f0fdfa 0%, #fefcf9 100%);
+  }
+
+  /* ── Feature Chip ─────────────────────────────── */
+  .feature-chip {
+    @apply inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-medium text-ink-800 shadow-card border border-gray-100/80 transition-all duration-300;
+  }
+  .feature-chip:hover {
+    @apply shadow-card-hover -translate-y-0.5;
+  }
+  .feature-chip-icon {
+    @apply flex h-6 w-6 items-center justify-center rounded-full bg-voa-100 text-voa-700;
+  }
+
+  /* ── Auth Tab ──────────────────────────────────── */
+  .auth-tab {
+    @apply flex-1 py-2.5 text-center text-sm font-semibold rounded-lg transition-all duration-200 cursor-pointer;
+  }
+  .auth-tab-active {
+    @apply bg-voa-950 text-white shadow-premium;
+  }
+  .auth-tab-inactive {
+    @apply bg-gray-100 text-gray-500 hover:text-gray-700 hover:bg-gray-200;
+  }
+
+  /* ── Stat Card ────────────────────────────────── */
+  .stat-card {
+    @apply card relative overflow-hidden;
+  }
+  .stat-card::before {
+    content: "";
+    @apply absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-voa-400 to-voa-600;
+  }
+
+  /* ── Animations ───────────────────────────────── */
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+
+  /* ── Modal Overlay ────────────────────────────── */
+  .modal-overlay {
+    @apply fixed inset-0 z-50 hidden items-center justify-center p-4;
+    background: rgba(15, 20, 25, 0.5);
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.active {
+    @apply flex;
+  }
+}
+
+@layer utilities {
+  /* ── Scrollbar styling ────────────────────────── */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 rounded-full;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-300;
+  }
+}

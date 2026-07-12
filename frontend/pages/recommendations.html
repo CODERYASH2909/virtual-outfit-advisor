@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recommendations — Virtual Outfit Advisor</title>
+  <meta name="description" content="Get outfit recommendations built from your own wardrobe, matched by season and occasion." />
+  <link rel="stylesheet" href="/public/assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-app-gradient">
+  <div class="flex min-h-screen">
+    <aside id="sidebar-mount" class="hidden w-64 flex-shrink-0 border-r border-gray-100/60 bg-white/70 backdrop-blur-xl p-5 lg:block scrollbar-thin"></aside>
+
+    <main class="flex-1 p-6 md:p-10">
+      <div class="mb-8 animate-fade-in-up">
+        <h1 class="text-2xl font-bold text-ink-900">Outfit Recommendations</h1>
+        <p class="text-sm text-gray-500">Get an outfit suggestion built from your own wardrobe, matched by season and occasion.</p>
+      </div>
+
+      <div class="card mb-8 max-w-2xl animate-fade-in-up animate-delay-100">
+        <form id="recommend-form" class="grid gap-4 sm:grid-cols-3 sm:items-end">
+          <div>
+            <label class="label" for="rec-season">Season</label>
+            <select id="rec-season" class="input-field">
+              <option value="all_season">Any / Current</option>
+              <option value="summer">Summer</option>
+              <option value="winter">Winter</option>
+              <option value="spring">Spring</option>
+              <option value="autumn">Autumn</option>
+              <option value="rainy">Rainy</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="rec-occasion">Occasion</label>
+            <select id="rec-occasion" class="input-field">
+              <option value="casual">Casual</option>
+              <option value="formal">Formal</option>
+              <option value="business">Business</option>
+              <option value="party">Party</option>
+              <option value="sports">Sports</option>
+              <option value="travel">Travel</option>
+              <option value="beach">Beach</option>
+              <option value="wedding">Wedding</option>
+              <option value="loungewear">Loungewear</option>
+            </select>
+          </div>
+          <button id="generate-btn" type="submit" class="btn-primary">Generate Outfit</button>
+        </form>
+      </div>
+
+      <div id="recommendation-result" class="max-w-2xl"></div>
+    </main>
+  </div>
+
+  <script type="module" src="/public/assets/js/pages/recommendations.js"></script>
+</body>
+</html>

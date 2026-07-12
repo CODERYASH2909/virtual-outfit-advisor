@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wardrobe — Virtual Outfit Advisor</title>
+  <meta name="description" content="Manage your digital wardrobe — upload, tag, search, and filter your clothing items." />
+  <link rel="stylesheet" href="/public/assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-app-gradient">
+  <div class="flex min-h-screen">
+    <aside id="sidebar-mount" class="hidden w-64 flex-shrink-0 border-r border-gray-100/60 bg-white/70 backdrop-blur-xl p-5 lg:block scrollbar-thin"></aside>
+
+    <main class="flex-1 p-6 md:p-10">
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-4 animate-fade-in-up">
+        <div>
+          <h1 class="text-2xl font-bold text-ink-900">Digital Wardrobe</h1>
+          <p class="text-sm text-gray-500">Manage every item you own in one place.</p>
+        </div>
+        <button id="add-item-btn" class="btn-primary">+ Add Item</button>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="card mb-6 flex flex-wrap items-center gap-3 animate-fade-in-up animate-delay-100">
+        <input id="search-input" type="text" placeholder="Search by name, brand, color, tags..." class="input-field max-w-xs" />
+        <select data-filter="category" class="input-field w-auto">
+          <option value="">All Categories</option>
+          <option value="top">Top</option>
+          <option value="bottom">Bottom</option>
+          <option value="dress">Dress</option>
+          <option value="outerwear">Outerwear</option>
+          <option value="footwear">Footwear</option>
+          <option value="accessory">Accessory</option>
+          <option value="headwear">Headwear</option>
+          <option value="bag">Bag</option>
+          <option value="innerwear">Innerwear</option>
+          <option value="sportswear">Sportswear</option>
+        </select>
+        <select data-filter="season" class="input-field w-auto">
+          <option value="">All Seasons</option>
+          <option value="summer">Summer</option>
+          <option value="winter">Winter</option>
+          <option value="spring">Spring</option>
+          <option value="autumn">Autumn</option>
+          <option value="rainy">Rainy</option>
+          <option value="all_season">All Season</option>
+        </select>
+        <select data-filter="occasion" class="input-field w-auto">
+          <option value="">All Occasions</option>
+          <option value="casual">Casual</option>
+          <option value="formal">Formal</option>
+          <option value="business">Business</option>
+          <option value="party">Party</option>
+          <option value="sports">Sports</option>
+          <option value="travel">Travel</option>
+          <option value="beach">Beach</option>
+          <option value="wedding">Wedding</option>
+          <option value="loungewear">Loungewear</option>
+        </select>
+      </div>
+
+      <div id="wardrobe-grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"></div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Item Modal -->
+  <div id="item-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background:rgba(15,20,25,0.5);backdrop-filter:blur(4px)">
+    <div class="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-premium animate-scale-in">
+      <div class="mb-4 flex items-center justify-between">
+        <h2 id="item-modal-title" class="text-lg font-semibold text-ink-900">Add New Item</h2>
+        <button data-modal-dismiss class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600">✕</button>
+      </div>
+      <form id="item-form" class="space-y-4" enctype="multipart/form-data">
+        <div>
+          <label class="label" for="item-name">Item name</label>
+          <input type="text" id="item-name" required class="input-field" placeholder="e.g. Navy Blue Blazer" />
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="label" for="item-category">Category</label>
+            <select id="item-category" required class="input-field">
+              <option value="top">Top</option>
+              <option value="bottom">Bottom</option>
+              <option value="dress">Dress</option>
+              <option value="outerwear">Outerwear</option>
+              <option value="footwear">Footwear</option>
+              <option value="accessory">Accessory</option>
+              <option value="headwear">Headwear</option>
+              <option value="bag">Bag</option>
+              <option value="innerwear">Innerwear</option>
+              <option value="sportswear">Sportswear</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="item-color">Primary color</label>
+            <input type="text" id="item-color" required class="input-field" placeholder="e.g. Navy" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="label" for="item-season">Season</label>
+            <select id="item-season" class="input-field">
+              <option value="all_season">All Season</option>
+              <option value="summer">Summer</option>
+              <option value="winter">Winter</option>
+              <option value="spring">Spring</option>
+              <option value="autumn">Autumn</option>
+              <option value="rainy">Rainy</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="item-occasion">Occasion</label>
+            <select id="item-occasion" class="input-field">
+              <option value="casual">Casual</option>
+              <option value="formal">Formal</option>
+              <option value="business">Business</option>
+              <option value="party">Party</option>
+              <option value="sports">Sports</option>
+              <option value="travel">Travel</option>
+              <option value="beach">Beach</option>
+              <option value="wedding">Wedding</option>
+              <option value="loungewear">Loungewear</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="label" for="item-brand">Brand</label>
+          <input type="text" id="item-brand" class="input-field" placeholder="e.g. Zara" />
+        </div>
+        <div>
+          <label class="label" for="item-tags">Tags (comma-separated)</label>
+          <input type="text" id="item-tags" class="input-field" placeholder="e.g. summer, favorite, work" />
+        </div>
+        <div>
+          <label class="label" for="item-notes">Notes</label>
+          <textarea id="item-notes" rows="2" class="input-field"></textarea>
+        </div>
+        <div>
+          <label class="label" for="item-image">Photo</label>
+          <input type="file" id="item-image" accept="image/*" class="input-field" />
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button type="button" data-modal-dismiss class="btn-secondary flex-1">Cancel</button>
+          <button type="submit" class="btn-primary flex-1">Save Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/public/assets/js/pages/wardrobe.js"></script>
+</body>
+</html>

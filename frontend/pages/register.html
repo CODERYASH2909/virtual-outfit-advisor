@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — Virtual Outfit Advisor</title>
+  <meta name="description" content="Create your Virtual Outfit Advisor account and start building your digital wardrobe today." />
+  <link rel="stylesheet" href="/public/assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="flex min-h-screen items-center justify-center bg-auth-gradient px-4 py-10">
+  <div class="w-full max-w-lg animate-fade-in-up">
+    <div class="mb-8 flex items-center justify-center gap-2.5">
+      <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-voa-950 text-white font-display font-bold text-lg">V</div>
+      <span class="font-display text-2xl text-ink-900">VOA</span>
+    </div>
+
+    <div class="rounded-2xl bg-white p-8 shadow-card border border-gray-100/80">
+      <!-- Tab toggle -->
+      <div class="mb-6 flex gap-2 rounded-lg bg-gray-100 p-1">
+        <span class="auth-tab auth-tab-active">Create Account</span>
+        <a href="/pages/login.html" class="auth-tab auth-tab-inactive">Sign In</a>
+      </div>
+
+      <h1 class="mb-1 text-2xl font-bold text-ink-900">Create your account</h1>
+      <p class="mb-6 text-sm text-gray-500">Start building your digital wardrobe today.</p>
+
+      <form id="register-form" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="label" for="first_name">First name</label>
+            <input type="text" id="first_name" required class="input-field" placeholder="Jane" />
+          </div>
+          <div>
+            <label class="label" for="last_name">Last name</label>
+            <input type="text" id="last_name" required class="input-field" placeholder="Doe" />
+          </div>
+        </div>
+        <div>
+          <label class="label" for="username">Username</label>
+          <input type="text" id="username" required class="input-field" placeholder="janedoe" />
+        </div>
+        <div>
+          <label class="label" for="email">Email address</label>
+          <input type="email" id="email" required class="input-field" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label class="label" for="style_preference">Style preference</label>
+          <select id="style_preference" class="input-field">
+            <option value="casual">Casual</option>
+            <option value="formal">Formal</option>
+            <option value="streetwear">Streetwear</option>
+            <option value="business">Business</option>
+            <option value="sporty">Sporty</option>
+            <option value="bohemian">Bohemian</option>
+            <option value="minimalist">Minimalist</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="label" for="password">Password</label>
+            <input type="password" id="password" required class="input-field" placeholder="••••••••" />
+          </div>
+          <div>
+            <label class="label" for="password_confirm">Confirm password</label>
+            <input type="password" id="password_confirm" required class="input-field" placeholder="••••••••" />
+          </div>
+        </div>
+        <button id="register-submit" type="submit" class="btn-primary w-full">Create Account</button>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-gray-500">
+        Already have an account?
+        <a href="/pages/login.html" class="font-medium text-voa-700 hover:text-voa-900 transition-colors">Log in</a>
+      </p>
+    </div>
+  </div>
+
+  <script type="module" src="/public/assets/js/pages/register.js"></script>
+</body>
+</html>

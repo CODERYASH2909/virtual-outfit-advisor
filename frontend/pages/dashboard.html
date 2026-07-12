@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Virtual Outfit Advisor</title>
+  <meta name="description" content="Your VOA dashboard — quick wardrobe stats, recent items, and shortcuts." />
+  <link rel="stylesheet" href="/public/assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-app-gradient">
+  <div class="flex min-h-screen">
+    <aside id="sidebar-mount" class="hidden w-64 flex-shrink-0 border-r border-gray-100/60 bg-white/70 backdrop-blur-xl p-5 lg:block scrollbar-thin"></aside>
+
+    <main class="flex-1 p-6 md:p-10">
+      <div class="mb-8 animate-fade-in-up">
+        <h1 class="text-2xl font-bold text-ink-900">Welcome back, <span id="welcome-name">there</span> 👋</h1>
+        <p class="text-sm text-gray-500">Here's a quick look at your wardrobe and style activity.</p>
+      </div>
+
+      <div class="mb-8 grid gap-6 sm:grid-cols-3">
+        <div class="stat-card animate-fade-in-up">
+          <p class="text-sm text-gray-500">Total Items</p>
+          <p id="stat-total" class="text-3xl font-bold text-voa-800">0</p>
+        </div>
+        <div class="stat-card animate-fade-in-up animate-delay-100">
+          <p class="text-sm text-gray-500">Favorites</p>
+          <p id="stat-favorites" class="text-3xl font-bold text-voa-800">0</p>
+        </div>
+        <div class="stat-card animate-fade-in-up animate-delay-200">
+          <p class="text-sm text-gray-500">Never Worn</p>
+          <p id="stat-never-worn" class="text-3xl font-bold text-voa-800">0</p>
+        </div>
+      </div>
+
+      <div class="mb-8 flex flex-wrap gap-4 animate-fade-in-up animate-delay-300">
+        <button id="quick-generate-btn" class="btn-primary">✨ Generate Outfit Recommendation</button>
+        <a href="/pages/wardrobe.html" class="btn-secondary">+ Add Wardrobe Item</a>
+        <a href="/pages/travel-planner.html" class="btn-secondary">✈ Plan a Trip</a>
+      </div>
+
+      <div class="animate-fade-in-up animate-delay-400">
+        <h2 class="mb-4 text-lg font-semibold text-ink-900">Recently Added Items</h2>
+        <div id="recent-items" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/public/assets/js/pages/dashboard.js"></script>
+</body>
+</html>

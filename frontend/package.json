@@ -1,0 +1,21 @@
+{
+  "name": "virtual-outfit-advisor-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Virtual Outfit Advisor (VOA) - HTML5, CSS3, TypeScript, Tailwind CSS",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/styles/input.css -o ./public/assets/styles.css --minify",
+    "watch:css": "tailwindcss -i ./src/styles/input.css -o ./public/assets/styles.css --watch",
+    "build:ts": "tsc -p tsconfig.json",
+    "watch:ts": "tsc -p tsconfig.json --watch",
+    "build": "npm run build:css && npm run build:ts",
+    "dev": "concurrently \"npm run watch:css\" \"npm run watch:ts\" \"npm run serve\"",
+    "serve": "live-server --port=5173 --entry-file=index.html"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.2",
+    "concurrently": "^8.2.2",
+    "live-server": "^1.2.2"
+  }
+}
