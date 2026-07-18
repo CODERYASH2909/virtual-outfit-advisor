@@ -32,7 +32,7 @@ function renderRecommendation(rec: Recommendation): void {
       <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
         ${rec.items_detail.map((item) => `
           <div class="rounded-lg border border-gray-100 p-3 text-center">
-            <div class="mb-2 h-20 w-full overflow-hidden rounded-md bg-voa-50">
+            <div class="mb-2 h-40 w-full overflow-hidden rounded-md bg-voa-50">
               ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" />` : `<div class="flex h-full items-center justify-center text-xs text-voa-300">No Image</div>`}
             </div>
             <p class="truncate text-xs font-medium">${item.name}</p>

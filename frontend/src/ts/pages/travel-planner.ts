@@ -66,7 +66,7 @@ function renderPlanResult(plan: TravelPlan): void {
           <div class="grid grid-cols-3 gap-3">
             ${plan.outfit_suggestions.map((item) => `
               <div class="rounded-lg border border-gray-100 p-2 text-center">
-                <div class="mb-1 h-16 w-full overflow-hidden rounded bg-voa-50">
+                <div class="mb-1 h-32 w-full overflow-hidden rounded bg-voa-50">
                   ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" />` : `<div class="flex h-full items-center justify-center text-[10px] text-voa-300">No Image</div>`}
                 </div>
                 <p class="truncate text-[11px]">${item.name}</p>
