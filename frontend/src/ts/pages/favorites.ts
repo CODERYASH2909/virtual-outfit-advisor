@@ -1,7 +1,7 @@
 import { requireAuth } from "../auth.js";
 import { renderSidebar } from "../components/navbar.js";
 import { apiRequest } from "../api.js";
-import { qs, qsa } from "../utils.js";
+import { qs, qsa, getImageUrl } from "../utils.js";
 import { showToast } from "../components/toast.js";
 
 interface FavoriteEntry {
@@ -35,7 +35,7 @@ async function loadFavorites(): Promise<void> {
           <div class="grid grid-cols-3 gap-2">
             ${items.map((item: any) => `
               <div class="h-16 overflow-hidden rounded bg-voa-50">
-                ${item.image ? `<img src="${item.image}" class="h-full w-full object-cover" />` : ""}
+                ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" />` : ""}
               </div>`).join("")}
           </div>
         </div>`;

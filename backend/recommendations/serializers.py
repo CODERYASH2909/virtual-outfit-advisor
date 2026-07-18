@@ -12,6 +12,10 @@ class RecommendationRequestSerializer(serializers.Serializer):
         choices=["casual", "formal", "business", "party", "sports", "travel", "beach", "wedding", "loungewear"],
         required=False, default="casual",
     )
+    city = serializers.CharField(required=False, allow_blank=True, max_length=120)
+    country = serializers.CharField(required=False, allow_blank=True, max_length=120)
+    latitude = serializers.FloatField(required=False, allow_null=True)
+    longitude = serializers.FloatField(required=False, allow_null=True)
 
 
 class RecommendationSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 import { requireAuth } from "../auth.js";
 import { renderSidebar } from "../components/navbar.js";
 import { apiRequest } from "../api.js";
-import { qs } from "../utils.js";
+import { qs, getImageUrl } from "../utils.js";
 import { showToast } from "../components/toast.js";
 
 interface TravelPlan {
@@ -67,7 +67,7 @@ function renderPlanResult(plan: TravelPlan): void {
             ${plan.outfit_suggestions.map((item) => `
               <div class="rounded-lg border border-gray-100 p-2 text-center">
                 <div class="mb-1 h-16 w-full overflow-hidden rounded bg-voa-50">
-                  ${item.image ? `<img src="${item.image}" class="h-full w-full object-cover" />` : `<div class="flex h-full items-center justify-center text-[10px] text-voa-300">No Image</div>`}
+                  ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" />` : `<div class="flex h-full items-center justify-center text-[10px] text-voa-300">No Image</div>`}
                 </div>
                 <p class="truncate text-[11px]">${item.name}</p>
               </div>`).join("")}
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const payload = {
       destination_city: qs<HTMLInputElement>("#destination_city").value.trim(),
-      destination_country: qs<HTMLInputElement>("#destination_country").value.trim(),
+      destination_country: qs<HTMLSelectElement>("#destination_country").value,
       start_date: qs<HTMLInputElement>("#start_date").value,
       end_date: qs<HTMLInputElement>("#end_date").value,
       trip_purpose: qs<HTMLSelectElement>("#trip_purpose").value,

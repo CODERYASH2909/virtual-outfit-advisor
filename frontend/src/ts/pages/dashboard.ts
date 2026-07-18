@@ -1,8 +1,8 @@
 import { requireAuth, getCurrentUser } from "../auth.js";
 import { renderSidebar } from "../components/navbar.js";
 import { apiRequest } from "../api.js";
-import { qs } from "../utils.js";
-
+import { qs, getImageUrl } from "../utils.js";
+ 
 interface WardrobeStats {
   total_items: number;
   favorites: number;
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       ? items.map((item) => `
         <div class="card flex items-center gap-4">
           <div class="h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-voa-50">
-            ${item.image ? `<img src="${item.image}" class="h-full w-full object-cover" alt="${item.name}" />` : `<div class="flex h-full items-center justify-center text-voa-400 text-xs">No image</div>`}
+            ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" alt="${item.name}" />` : `<div class="flex h-full items-center justify-center text-voa-400 text-xs">No image</div>`}
           </div>
           <div class="min-w-0">
             <p class="truncate font-medium text-ink-900">${item.name}</p>

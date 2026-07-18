@@ -1,3 +1,14 @@
+import { API_BASE_URL } from "./config.js";
+
+const BACKEND_URL = API_BASE_URL.replace("/api", "");
+
+export function getImageUrl(path: string | null): string | null {
+  if (!path) return null;
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
+  if (path.startsWith("/")) return `${BACKEND_URL}${path}`;
+  return `${BACKEND_URL}/${path}`;
+}
+
 export function qs<T extends HTMLElement>(selector: string, parent: ParentNode = document): T {
   const el = parent.querySelector(selector);
   if (!el) throw new Error(`Element not found for selector: ${selector}`);

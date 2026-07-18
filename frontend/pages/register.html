@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Create Account — Virtual Outfit Advisor</title>
-  <meta name="description" content="Create your Virtual Outfit Advisor account and start building your digital wardrobe today." />
+  <meta name="description"
+    content="Create your Virtual Outfit Advisor account and start building your digital wardrobe today." />
   <link rel="stylesheet" href="/public/assets/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 </head>
+
 <body class="flex min-h-screen items-center justify-center bg-auth-gradient px-4 py-10">
   <div class="w-full max-w-lg animate-fade-in-up">
-    <div class="mb-8 flex items-center justify-center gap-2.5">
-      <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-voa-950 text-white font-display font-bold text-lg">V</div>
-      <span class="font-display text-2xl text-ink-900">VOA</span>
+    <div class="brand-orbit mb-8 flex-col justify-center gap-2 sm:flex-row sm:gap-3"
+      aria-label="Virtual Outfit Advisor">
+      <span class="brand-orbit-mark brand-orbit-mark-lg" aria-hidden="true">
+        <span class="brand-orbit-cube"></span>
+        <span class="brand-orbit-ring"></span>
+      </span>
+      <span class="font-display text-xl text-ink-900 sm:text-2xl">Virtual Outfit Advisor</span>
     </div>
 
     <div class="rounded-2xl bg-white p-8 shadow-card border border-gray-100/80">
@@ -31,16 +39,16 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="label" for="first_name">First name</label>
-            <input type="text" id="first_name" required class="input-field" placeholder="Jane" />
+            <input type="text" id="first_name" required class="input-field" placeholder="Enter Your Name" />
           </div>
           <div>
             <label class="label" for="last_name">Last name</label>
-            <input type="text" id="last_name" required class="input-field" placeholder="Doe" />
+            <input type="text" id="last_name" required class="input-field" placeholder="" />
           </div>
         </div>
         <div>
           <label class="label" for="username">Username</label>
-          <input type="text" id="username" required class="input-field" placeholder="janedoe" />
+          <input type="text" id="username" required class="input-field" placeholder="" />
         </div>
         <div>
           <label class="label" for="email">Email address</label>
@@ -80,4 +88,5 @@
 
   <script type="module" src="/public/assets/js/pages/register.js"></script>
 </body>
+
 </html>

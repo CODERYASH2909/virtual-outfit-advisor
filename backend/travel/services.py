@@ -13,7 +13,7 @@ class WeatherAPIError(Exception):
     pass
 
 
-def fetch_weather_forecast(city: str, country: str = ""):
+def fetch_weather_forecast(city: str = "", country: str = "", lat: float = None, lon: float = None):
     """
     Calls OpenWeatherMap's 5-day/3-hour forecast endpoint and returns a
     simplified summary: avg/min/max temperature (Celsius) and a dominant
@@ -22,9 +22,12 @@ def fetch_weather_forecast(city: str, country: str = ""):
     if not settings.WEATHER_API_KEY:
         raise WeatherAPIError("Weather API key is not configured on the server.")
 
-    query = f"{city},{country}" if country else city
     url = f"{settings.WEATHER_API_BASE_URL}/forecast"
-    params = {"q": query, "appid": settings.WEATHER_API_KEY, "units": "metric"}
+    if lat is not None and lon is not None:
+        params = {"lat": lat, "lon": lon, "appid": settings.WEATHER_API_KEY, "units": "metric"}
+    else:
+        query = f"{city},{country}" if country else city
+        params = {"q": query, "appid": settings.WEATHER_API_KEY, "units": "metric"}
 
     try:
         response = requests.get(url, params=params, timeout=10)
@@ -32,7 +35,13 @@ def fetch_weather_forecast(city: str, country: str = ""):
         raise WeatherAPIError(f"Could not reach weather service: {exc}")
 
     if response.status_code != 200:
-        raise WeatherAPIError(f"Weather service returned an error for '{city}'.")
+        try:
+            error_data = response.json()
+            error_msg = error_data.get("message", response.text)
+        except Exception:
+            error_msg = response.text
+        location_str = f"coords ({lat}, {lon})" if (lat is not None and lon is not None) else f"'{city}'"
+        raise WeatherAPIError(f"Weather service returned an error for {location_str}: {error_msg}")
 
     data = response.json()
     entries = data.get("list", [])
@@ -43,7 +52,12 @@ def fetch_weather_forecast(city: str, country: str = ""):
     conditions = [e["weather"][0]["main"] for e in entries if e.get("weather")]
     dominant_condition = max(set(conditions), key=conditions.count) if conditions else "Clear"
 
+    resolved_city = data.get("city", {}).get("name", city)
+    resolved_country = data.get("city", {}).get("country", country)
+
     return {
+        "city": resolved_city,
+        "country": resolved_country,
         "avg_temperature_c": round(sum(temps) / len(temps), 1),
         "min_temperature_c": round(min(temps), 1),
         "max_temperature_c": round(max(temps), 1),

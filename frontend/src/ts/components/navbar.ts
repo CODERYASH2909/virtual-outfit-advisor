@@ -16,9 +16,12 @@ function ensureMobileTopbar(): void {
   bar.id = "voa-mobile-topbar";
   bar.className = "sticky top-0 z-40 flex items-center justify-between border-b border-gray-100 bg-white px-4 py-3 lg:hidden";
   bar.innerHTML = `
-    <div class="flex items-center gap-2">
-      <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-voa-600 text-white font-display font-bold text-sm">V</div>
-      <span class="font-display text-lg font-semibold text-ink-900">VOA</span>
+    <div class="brand-orbit" aria-label="Virtual Outfit Advisor">
+      <span class="brand-orbit-mark" aria-hidden="true">
+        <span class="brand-orbit-cube"></span>
+        <span class="brand-orbit-ring"></span>
+      </span>
+      <span class="font-display text-lg font-semibold text-ink-900">Virtual Outfit Advisor</span>
     </div>
     <button id="voa-mobile-menu-btn" class="rounded-lg border border-gray-200 p-2 text-gray-600">☰</button>
   `;
@@ -42,9 +45,12 @@ export function renderSidebar(mountId: string, activeHref: string): void {
   mount.innerHTML = `
     <div class="flex h-full flex-col justify-between">
       <div>
-        <div class="mb-8 flex items-center gap-2 px-2">
-          <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-voa-600 text-white font-display font-bold">V</div>
-          <span class="font-display text-lg font-semibold text-ink-900">VOA</span>
+        <div class="brand-orbit mb-8 px-2" aria-label="Virtual Outfit Advisor">
+          <span class="brand-orbit-mark" aria-hidden="true">
+            <span class="brand-orbit-cube"></span>
+            <span class="brand-orbit-ring"></span>
+          </span>
+          <span class="font-display text-lg font-semibold text-ink-900">Virtual Outfit Advisor</span>
         </div>
         <nav class="flex flex-col gap-1">
           ${NAV_ITEMS.map(

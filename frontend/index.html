@@ -15,9 +15,12 @@
   <!-- Nav -->
   <header class="sticky top-0 z-50 border-b border-gray-100/60 bg-white/70 backdrop-blur-xl">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-      <div class="flex items-center gap-2.5">
-        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-voa-950 text-white font-display font-bold text-lg">V</div>
-        <span class="font-display text-xl text-ink-900">VOA</span>
+      <div class="brand-orbit" aria-label="Virtual Outfit Advisor">
+        <span class="brand-orbit-mark" aria-hidden="true">
+          <span class="brand-orbit-cube"></span>
+          <span class="brand-orbit-ring"></span>
+        </span>
+        <span class="hidden font-display text-xl text-ink-900 sm:inline">Virtual Outfit Advisor</span>
       </div>
       <nav class="hidden items-center gap-8 text-sm font-medium text-gray-500 md:flex">
         <a href="#features" class="transition-colors hover:text-voa-800">Features</a>
@@ -41,7 +44,6 @@
       <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <!-- Left — Marketing -->
         <div class="animate-fade-in-up">
-          <span class="badge mb-6">✨ Personal wardrobe, not shopping</span>
           <h1 class="mb-6 font-display text-5xl leading-tight text-ink-900 md:text-6xl lg:text-[3.5rem]">
             Virtual Outfit<br>Advisor
           </h1>
@@ -76,7 +78,7 @@
             <form id="hero-register-form" class="space-y-4">
               <div>
                 <label class="label" for="hero-name">Name</label>
-                <input type="text" id="hero-name" class="input-field" placeholder="Jane Doe" />
+                <input type="text" id="hero-name" class="input-field" />
               </div>
               <div>
                 <label class="label" for="hero-email">Email</label>

@@ -1,7 +1,7 @@
 import { requireAuth } from "../auth.js";
 import { renderSidebar } from "../components/navbar.js";
 import { apiRequest } from "../api.js";
-import { qs, qsa, debounce, buildQueryString } from "../utils.js";
+import { qs, qsa, debounce, buildQueryString, getImageUrl } from "../utils.js";
 import { showToast } from "../components/toast.js";
 import { openModal, closeModal, bindModalDismiss } from "../components/modal.js";
 
@@ -48,7 +48,7 @@ function renderItemCard(item: WardrobeItem): string {
       <span class="${item.is_favorite ? "text-rose-500" : "text-gray-300"}">&#9829;</span>
     </button>
     <div class="mb-4 h-40 w-full overflow-hidden rounded-lg bg-voa-50">
-      ${item.image ? `<img src="${item.image}" class="h-full w-full object-cover" alt="${item.name}" />` : `<div class="flex h-full items-center justify-center text-voa-300 text-sm">No Image</div>`}
+      ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" alt="${item.name}" />` : `<div class="flex h-full items-center justify-center text-voa-300 text-sm">No Image</div>`}
     </div>
     <h3 class="font-semibold text-ink-900">${item.name}</h3>
     <p class="text-xs text-gray-500 mb-2">${item.brand || "No brand"}</p>
@@ -138,6 +138,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   qs<HTMLButtonElement>("#add-item-btn").addEventListener("click", openAddModal);
   qs<HTMLFormElement>("#item-form").addEventListener("submit", submitItemForm);
+
+  const performSearch = () => {
+    currentFilters.search = qs<HTMLInputElement>("#search-input").value;
+    loadItems();
+  };
+
+  qs<HTMLButtonElement>("#search-btn").addEventListener("click", performSearch);
+
+  qs<HTMLInputElement>("#search-input").addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      performSearch();
+    }
+  });
 
   qs<HTMLInputElement>("#search-input").addEventListener(
     "input",

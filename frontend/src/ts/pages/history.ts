@@ -1,7 +1,7 @@
 import { requireAuth } from "../auth.js";
 import { renderSidebar } from "../components/navbar.js";
 import { apiRequest } from "../api.js";
-import { qs, qsa, formatDate, buildQueryString } from "../utils.js";
+import { qs, qsa, formatDate, buildQueryString, getImageUrl } from "../utils.js";
 import { showToast } from "../components/toast.js";
 
 interface HistoryEntry {
@@ -34,7 +34,7 @@ async function loadHistory(): Promise<void> {
           <div class="flex -space-x-3">
             ${entry.items_detail.slice(0, 3).map((item: any) => `
               <div class="h-10 w-10 overflow-hidden rounded-full border-2 border-white bg-voa-50">
-                ${item.image ? `<img src="${item.image}" class="h-full w-full object-cover" />` : ""}
+                ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" />` : ""}
               </div>`).join("")}
           </div>
           <div>

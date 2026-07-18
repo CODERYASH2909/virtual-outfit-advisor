@@ -25,7 +25,10 @@
 
       <!-- Search & Filters -->
       <div class="card mb-6 flex flex-wrap items-center gap-3 animate-fade-in-up animate-delay-100">
-        <input id="search-input" type="text" placeholder="Search by name, brand, color, tags..." class="input-field max-w-xs" />
+        <div class="flex w-full max-w-sm items-center gap-2">
+          <input id="search-input" type="text" placeholder="Search by name, brand, color, tags..." class="input-field" />
+          <button id="search-btn" class="btn-primary !py-2.5 !px-4 text-sm font-semibold">Search</button>
+        </div>
         <select data-filter="category" class="input-field w-auto">
           <option value="">All Categories</option>
           <option value="top">Top</option>

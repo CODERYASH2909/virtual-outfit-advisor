@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recommendations — Virtual Outfit Advisor</title>
-  <meta name="description" content="Get outfit recommendations built from your own wardrobe, matched by season and occasion." />
+  <meta name="description" content="Get outfit recommendations built from your own wardrobe, matched by weather and occasion." />
   <link rel="stylesheet" href="/public/assets/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,11 +17,11 @@
     <main class="flex-1 p-6 md:p-10">
       <div class="mb-8 animate-fade-in-up">
         <h1 class="text-2xl font-bold text-ink-900">Outfit Recommendations</h1>
-        <p class="text-sm text-gray-500">Get an outfit suggestion built from your own wardrobe, matched by season and occasion.</p>
+        <p class="text-sm text-gray-500">Get an outfit suggestion built from your own wardrobe, matched by weather, season, and occasion.</p>
       </div>
 
-      <div class="card mb-8 max-w-2xl animate-fade-in-up animate-delay-100">
-        <form id="recommend-form" class="grid gap-4 sm:grid-cols-3 sm:items-end">
+      <div class="card mb-8 max-w-4xl animate-fade-in-up animate-delay-100">
+        <form id="recommend-form" class="grid gap-4 md:grid-cols-5 md:items-end">
           <div>
             <label class="label" for="rec-season">Season</label>
             <select id="rec-season" class="input-field">
@@ -31,6 +31,59 @@
               <option value="spring">Spring</option>
               <option value="autumn">Autumn</option>
               <option value="rainy">Rainy</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="rec-city">City</label>
+            <div class="relative flex items-center">
+              <input id="rec-city" class="input-field pr-10 w-full" type="text" placeholder="Ahmedabad" />
+              <button id="detect-loc-btn" type="button" class="absolute right-3 text-voa-500 hover:text-voa-700 transition-colors focus:outline-none" title="Use current location">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="label" for="rec-country">Country</label>
+            <select id="rec-country" class="input-field">
+              <option value="">Select Country</option>
+              <option value="IN" selected>India (IN)</option>
+              <option value="US">United States (US)</option>
+              <option value="GB">United Kingdom (GB)</option>
+              <option value="FR">France (FR)</option>
+              <option value="DE">Germany (DE)</option>
+              <option value="IT">Italy (IT)</option>
+              <option value="ES">Spain (ES)</option>
+              <option value="JP">Japan (JP)</option>
+              <option value="CA">Canada (CA)</option>
+              <option value="AU">Australia (AU)</option>
+              <option value="CH">Switzerland (CH)</option>
+              <option value="SG">Singapore (SG)</option>
+              <option value="AE">United Arab Emirates (AE)</option>
+              <option value="NL">Netherlands (NL)</option>
+              <option value="ZA">South Africa (ZA)</option>
+              <option value="NZ">New Zealand (NZ)</option>
+              <option value="BR">Brazil (BR)</option>
+              <option value="MX">Mexico (MX)</option>
+              <option value="CN">China (CN)</option>
+              <option value="TH">Thailand (TH)</option>
+              <option value="TR">Turkey (TR)</option>
+              <option value="MV">Maldives (MV)</option>
+              <option value="ID">Indonesia (ID)</option>
+              <option value="GR">Greece (GR)</option>
+              <option value="AT">Austria (AT)</option>
+              <option value="SE">Sweden (SE)</option>
+              <option value="NO">Norway (NO)</option>
+              <option value="DK">Denmark (DK)</option>
+              <option value="BE">Belgium (BE)</option>
+              <option value="IE">Ireland (IE)</option>
+              <option value="PT">Portugal (PT)</option>
+              <option value="MY">Malaysia (MY)</option>
+              <option value="VN">Vietnam (VN)</option>
+              <option value="HK">Hong Kong (HK)</option>
+              <option value="KR">South Korea (KR)</option>
             </select>
           </div>
           <div>
@@ -51,7 +104,7 @@
         </form>
       </div>
 
-      <div id="recommendation-result" class="max-w-2xl"></div>
+      <div id="recommendation-result" class="max-w-4xl"></div>
     </main>
   </div>
 

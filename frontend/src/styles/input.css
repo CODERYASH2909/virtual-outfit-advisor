@@ -52,6 +52,70 @@
     @apply inline-flex items-center gap-1.5 rounded-full bg-voa-50 border border-voa-200 px-3 py-1 text-xs font-medium text-voa-800;
   }
 
+  /* Brand mark */
+  .brand-orbit {
+    @apply flex items-center gap-3;
+  }
+  .brand-orbit-mark {
+    position: relative;
+    display: inline-flex;
+    height: 2.25rem;
+    width: 2.25rem;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    perspective: 140px;
+  }
+  .brand-orbit-mark-lg {
+    height: 2.75rem;
+    width: 2.75rem;
+  }
+  .brand-orbit-cube {
+    position: relative;
+    z-index: 2;
+    height: 1.35rem;
+    width: 1.35rem;
+    border-radius: 0.45rem;
+    background: linear-gradient(145deg, #ffffff 0%, #99f6e4 42%, #0d3b3f 100%);
+    box-shadow: 0 12px 24px rgba(13, 59, 63, 0.22), inset -6px -7px 12px rgba(13, 59, 63, 0.28), inset 5px 5px 10px rgba(255, 255, 255, 0.72);
+    transform: rotateX(58deg) rotateZ(45deg);
+    transform-style: preserve-3d;
+    animation: brand-cube-float 4.8s ease-in-out infinite;
+  }
+  .brand-orbit-cube::before,
+  .brand-orbit-cube::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    transform: translateZ(-0.36rem);
+  }
+  .brand-orbit-cube::before {
+    background: rgba(20, 184, 166, 0.28);
+  }
+  .brand-orbit-cube::after {
+    border: 1px solid rgba(255, 255, 255, 0.75);
+  }
+  .brand-orbit-ring {
+    position: absolute;
+    inset: 0.18rem;
+    border: 1px solid rgba(13, 148, 136, 0.35);
+    border-radius: 9999px;
+    transform: rotateX(68deg) rotateZ(-18deg);
+    animation: brand-ring-spin 7s linear infinite;
+  }
+  .brand-orbit-ring::after {
+    content: "";
+    position: absolute;
+    top: -0.2rem;
+    left: 50%;
+    height: 0.38rem;
+    width: 0.38rem;
+    border-radius: 9999px;
+    background: #f59e0b;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+  }
+
   /* ── Gradient Backgrounds ─────────────────────── */
   .bg-hero-gradient {
     background: linear-gradient(135deg, #e8f5f0 0%, #f0fdfa 25%, #fefcf9 50%, #fef7ed 75%, #fdefd6 100%);
@@ -109,6 +173,31 @@
   }
   .modal-overlay.active {
     @apply flex;
+  }
+}
+
+@keyframes brand-cube-float {
+  0%, 100% {
+    transform: translateY(0) rotateX(58deg) rotateZ(45deg);
+  }
+  50% {
+    transform: translateY(-4px) rotateX(58deg) rotateZ(58deg);
+  }
+}
+
+@keyframes brand-ring-spin {
+  0% {
+    transform: rotateX(68deg) rotateZ(-18deg);
+  }
+  100% {
+    transform: rotateX(68deg) rotateZ(342deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-orbit-cube,
+  .brand-orbit-ring {
+    animation: none;
   }
 }
 
