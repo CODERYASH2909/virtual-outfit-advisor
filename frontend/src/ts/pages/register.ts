@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       password: qs<HTMLInputElement>("#password").value,
       password_confirm: qs<HTMLInputElement>("#password_confirm").value,
       style_preference: qs<HTMLSelectElement>("#style_preference").value,
+      gender: qs<HTMLSelectElement>("#gender").value,
     };
 
     submitBtn.disabled = true;
