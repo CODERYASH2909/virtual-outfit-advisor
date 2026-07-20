@@ -34,19 +34,14 @@ def build_outfit(user, season=None, occasion=None, exclude_ids=None):
     exclude_ids = exclude_ids or []
     base_qs = WardrobeItem.objects.filter(user=user).exclude(id__in=exclude_ids)
 
-    if season and season != "all_season":
-        base_qs = base_qs.filter(models_season_filter(season))
-    if occasion:
-        base_qs = base_qs.filter(occasion=occasion)
-
     if not base_qs.exists():
-        return None, "No wardrobe items match the selected season/occasion. Try adding more items or relaxing filters."
+        return None, "No wardrobe items found. Try adding a few pieces to your wardrobe first."
 
     chosen = []
     anchor_color = None
 
     # Handle "dress" as an alternative to top+bottom.
-    dresses = list(base_qs.filter(category="dress"))
+    dresses = list(slot_candidates(base_qs, "dress", season, occasion))
     use_dress = bool(dresses) and random.random() < 0.35
 
     if use_dress:
@@ -55,7 +50,7 @@ def build_outfit(user, season=None, occasion=None, exclude_ids=None):
         anchor_color = dress.color
     else:
         for slot in ["top", "bottom"]:
-            candidates = list(base_qs.filter(category=slot))
+            candidates = list(slot_candidates(base_qs, slot, season, occasion))
             if anchor_color:
                 compatible = [c for c in candidates if colors_compatible(c.color, anchor_color)]
                 candidates = compatible or candidates
@@ -67,25 +62,42 @@ def build_outfit(user, season=None, occasion=None, exclude_ids=None):
                 anchor_color = pick.color
 
     # Footwear
-    footwear_candidates = list(base_qs.filter(category="footwear"))
+    footwear_candidates = list(slot_candidates(base_qs, "footwear", season, occasion))
     if footwear_candidates:
         compatible = [c for c in footwear_candidates if colors_compatible(c.color, anchor_color)]
         chosen.append(random.choice(compatible or footwear_candidates))
 
     # Optional accents (outerwear based on cold season, plus one accessory)
     if season in ("winter", "autumn", "rainy"):
-        outerwear = list(base_qs.filter(category="outerwear"))
+        outerwear = list(slot_candidates(base_qs, "outerwear", season, occasion))
         if outerwear:
             compatible = [c for c in outerwear if colors_compatible(c.color, anchor_color)]
             chosen.append(random.choice(compatible or outerwear))
 
     for slot in ["accessory", "bag", "headwear"]:
-        candidates = list(base_qs.filter(category=slot))
+        candidates = list(slot_candidates(base_qs, slot, season, occasion))
         if candidates and random.random() < 0.5:
             chosen.append(random.choice(candidates))
 
     explanation = _build_explanation(chosen, season, occasion)
     return chosen, explanation
+
+
+def slot_candidates(base_qs, category, season=None, occasion=None):
+    """Prefer requested season/occasion, then fall back to usable owned items in the slot."""
+    candidates = base_qs.filter(category=category)
+
+    if season and season != "all_season":
+        season_matches = candidates.filter(models_season_filter(season))
+        if season_matches.exists():
+            candidates = season_matches
+
+    if occasion:
+        occasion_matches = candidates.filter(occasion=occasion)
+        if occasion_matches.exists():
+            return occasion_matches
+
+    return candidates
 
 
 def models_season_filter(season):
