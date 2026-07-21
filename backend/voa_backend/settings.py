@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "travel",
     "favorites",
     "core",
+    "clothing_detection",
 ]
 
 MIDDLEWARE = [
@@ -185,3 +186,14 @@ EMAIL_BACKEND = config(
     "EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
 )
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="no-reply@voa.local")
+
+# --- Clothing Detection (YOLOv8) ---
+CLOTHING_DETECTION = {
+    "CONFIDENCE_THRESHOLD": config("CLOTHING_DETECTION_CONFIDENCE", default=0.25, cast=float),
+    "MAX_IMAGE_SIZE_MB": config("CLOTHING_DETECTION_MAX_IMAGE_MB", default=10, cast=int),
+    "CUSTOM_WEIGHTS_PATH": config(
+        "CLOTHING_DETECTION_WEIGHTS",
+        default=str(BASE_DIR / "ai_engine" / "clothing_detection" / "weights" / "best.pt"),
+    ),
+    "DEFAULT_WEIGHTS": config("CLOTHING_DETECTION_DEFAULT_WEIGHTS", default="yolov8n.pt"),
+}

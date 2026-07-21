@@ -10,6 +10,7 @@ urlpatterns = [
     path("api/recommendations/", include("recommendations.urls")),
     path("api/travel/", include("travel.urls")),
     path("api/favorites/", include("favorites.urls")),
+    path("api/clothing/", include("clothing_detection.urls")),
 ]
 
 if settings.DEBUG:
