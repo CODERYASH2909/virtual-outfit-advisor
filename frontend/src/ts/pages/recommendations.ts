@@ -111,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const season = qs<HTMLSelectElement>("#rec-season").value;
     const occasion = qs<HTMLSelectElement>("#rec-occasion").value;
     const city = cityInput.value.trim();
-    const country = qs<HTMLSelectElement>("#rec-country").value;
 
     const btn = qs<HTMLButtonElement>("#generate-btn");
     btn.disabled = true;
@@ -125,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
           season,
           occasion,
           city: city === "Detected Location" ? "" : city,
-          country: city === "Detected Location" ? "" : country,
           latitude: detectedLat,
           longitude: detectedLon
         }

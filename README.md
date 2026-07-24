@@ -1,4 +1,4 @@
-# 👔 Virtual Outfit Advisor (VOA)
+# Virtual Outfit Advisor (VOA)
 
 A **production-ready AI-powered web application** that helps users build a **Digital Wardrobe**, receive **personalized outfit recommendations**, and generate **smart travel packing suggestions** based on wardrobe contents, weather conditions, body attributes, and personal preferences.
 
@@ -300,7 +300,7 @@ Generates intelligent packing recommendations.
 - Fashion Trend Prediction
 - Mobile Application
 - Smart Notifications
-
+- Multi-language Support
 
 ---
 
