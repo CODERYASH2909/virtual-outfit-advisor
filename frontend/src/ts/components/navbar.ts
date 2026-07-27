@@ -4,7 +4,7 @@ const NAV_ITEMS = [
   { label: "Dashboard", href: "/pages/dashboard.html", icon: "grid" },
   { label: "Wardrobe", href: "/pages/wardrobe.html", icon: "shirt" },
   { label: "Recommendations", href: "/pages/recommendations.html", icon: "sparkles" },
-  { label: "Travel Planner", href: "/pages/travel-planner.html", icon: "plane" },
+  { label: "Outfits for Travel", href: "/pages/travel-planner.html", icon: "plane" },
   { label: "Favorites", href: "/pages/favorites.html", icon: "heart" },
   { label: "History", href: "/pages/history.html", icon: "clock" },
   { label: "Profile", href: "/pages/profile.html", icon: "user" },

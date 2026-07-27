@@ -71,27 +71,27 @@
   .brand-orbit-mark {
     position: relative;
     display: inline-flex;
-    height: 2.25rem;
-    width: 2.25rem;
+    height: 3.25rem;
+    width: 3.25rem;
     flex: none;
     align-items: center;
     justify-content: center;
-    perspective: 140px;
+    perspective: 180px;
   }
 
   .brand-orbit-mark-lg {
-    height: 2.75rem;
-    width: 2.75rem;
+    height: 4.25rem;
+    width: 4.25rem;
   }
 
   .brand-orbit-cube {
     position: relative;
     z-index: 2;
-    height: 1.35rem;
-    width: 1.35rem;
-    border-radius: 0.45rem;
+    height: 1.9rem;
+    width: 1.9rem;
+    border-radius: 0.6rem;
     background: linear-gradient(145deg, #ffffff 0%, #99f6e4 42%, #0d3b3f 100%);
-    box-shadow: 0 12px 24px rgba(13, 59, 63, 0.22), inset -6px -7px 12px rgba(13, 59, 63, 0.28), inset 5px 5px 10px rgba(255, 255, 255, 0.72);
+    box-shadow: 0 14px 28px rgba(13, 59, 63, 0.28), inset -6px -7px 12px rgba(13, 59, 63, 0.32), inset 5px 5px 10px rgba(255, 255, 255, 0.75);
     transform: rotateX(58deg) rotateZ(45deg);
     transform-style: preserve-3d;
     animation: brand-cube-float 4.8s ease-in-out infinite;
@@ -103,21 +103,21 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    transform: translateZ(-0.36rem);
+    transform: translateZ(-0.48rem);
   }
 
   .brand-orbit-cube::before {
-    background: rgba(20, 184, 166, 0.28);
+    background: rgba(20, 184, 166, 0.35);
   }
 
   .brand-orbit-cube::after {
-    border: 1px solid rgba(255, 255, 255, 0.75);
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
   }
 
   .brand-orbit-ring {
     position: absolute;
-    inset: 0.18rem;
-    border: 1px solid rgba(13, 148, 136, 0.35);
+    inset: 0.1rem;
+    border: 2px solid rgba(13, 148, 136, 0.55);
     border-radius: 9999px;
     transform: rotateX(68deg) rotateZ(-18deg);
     animation: brand-ring-spin 7s linear infinite;
@@ -126,13 +126,15 @@
   .brand-orbit-ring::after {
     content: "";
     position: absolute;
-    top: -0.2rem;
+    top: -0.3rem;
     left: 50%;
-    height: 0.38rem;
-    width: 0.38rem;
+    transform: translateX(-50%);
+    height: 0.55rem;
+    width: 0.55rem;
     border-radius: 9999px;
-    background: #f59e0b;
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+    background: #044e3a;
+    box-shadow: 0 0 10px rgba(4, 78, 58, 0.95), 0 0 4px #064e3b;
+    border: 1px solid #ffffff;
   }
 
   /* Animations */

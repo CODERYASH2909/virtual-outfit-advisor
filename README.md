@@ -134,7 +134,7 @@ Detects body landmarks and proportions.
 
 ---
 
-## 👗 Intelligent Outfit Recommendation
+##  Intelligent Outfit Recommendation
 
 Generates personalized outfit recommendations based on:
 
