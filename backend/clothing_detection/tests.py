@@ -112,3 +112,11 @@ class ClothingDetectorTests(SimpleTestCase):
             detector.detect("sample.jpg")
 
         self.assertEqual(Path(detector._model.weights), Path("C:/fashion/best.pt"))
+
+    def test_isolate_garment_fallback_on_invalid_image(self):
+        from .isolation import isolate_garment
+        success, message, clean_path, category = isolate_garment("non_existent_file.jpg")
+        self.assertFalse(success)
+        self.assertIn("Could not process", message)
+        self.assertIsNone(clean_path)
+

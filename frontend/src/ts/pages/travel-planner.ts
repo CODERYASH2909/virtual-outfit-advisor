@@ -49,30 +49,19 @@ function renderPlanResult(plan: TravelPlan): void {
       </div>
     </div>
 
-    <div class="grid gap-6 md:grid-cols-2">
-      <div class="card">
-        <h4 class="mb-3 font-semibold text-ink-900">Packing List</h4>
-        <ul class="space-y-2">
-          ${plan.packing_list.map((item) => `
-            <li class="flex items-center gap-2 text-sm text-gray-700">
-              <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-voa-600 focus:ring-voa-400" />
-              <span>${item}</span>
-            </li>`).join("")}
-        </ul>
-      </div>
-      <div class="card">
-        <h4 class="mb-3 font-semibold text-ink-900">Outfit Suggestions from Your Wardrobe</h4>
-        ${plan.outfit_suggestions.length ? `
-          <div class="grid grid-cols-3 gap-3">
-            ${plan.outfit_suggestions.map((item) => `
-              <div class="rounded-lg border border-gray-100 p-2 text-center">
-                <div class="mb-1 h-32 w-full overflow-hidden rounded bg-voa-50">
-                  ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" />` : `<div class="flex h-full items-center justify-center text-[10px] text-voa-300">No Image</div>`}
-                </div>
-                <p class="truncate text-[11px]">${item.name}</p>
-              </div>`).join("")}
-          </div>` : `<p class="text-sm text-gray-500">Add wardrobe items for this season to get outfit suggestions.</p>`}
-      </div>
+    <div class="card">
+      <h4 class="mb-4 font-semibold text-ink-900">Outfit Suggestions from Your Wardrobe</h4>
+      ${plan.outfit_suggestions.length ? `
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          ${plan.outfit_suggestions.map((item) => `
+            <div class="rounded-xl border border-gray-100 p-2.5 text-center transition-all hover:shadow-card hover:border-voa-200">
+              <div class="mb-2 h-36 w-full overflow-hidden rounded-lg bg-voa-50">
+                ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" />` : `<div class="flex h-full items-center justify-center text-xs text-voa-300">No Image</div>`}
+              </div>
+              <p class="truncate text-xs font-semibold text-ink-900">${item.name}</p>
+              ${item.category ? `<span class="mt-1 inline-block rounded-full bg-voa-50 px-2 py-0.5 text-[10px] font-medium text-voa-700 capitalize">${item.category}</span>` : ""}
+            </div>`).join("")}
+        </div>` : `<p class="text-sm text-gray-500">Add wardrobe items for this season to get outfit suggestions.</p>`}
     </div>
   `;
 }

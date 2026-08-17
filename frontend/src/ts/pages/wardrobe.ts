@@ -25,10 +25,10 @@ async function loadItems(): Promise<void> {
     return;
   }
 
-  const items = res.data.results || [];
+  const items: WardrobeItem[] = Array.isArray(res.data) ? res.data : (res.data?.results || []);
   grid.innerHTML = items.length
     ? items.map(renderItemCard).join("")
-    : `<p class="col-span-full text-sm text-gray-500">No items match your filters. Try adjusting search or add a new item.</p>`;
+    : `<p class="col-span-full text-sm text-gray-500">No clothes match your search. Try typing a different keyword or add a new item.</p>`;
 
   qsa<HTMLButtonElement>("[data-edit-id]", grid).forEach((btn) =>
     btn.addEventListener("click", () => openEditModal(items.find((i) => i.id === Number(btn.dataset.editId))!))
@@ -123,11 +123,24 @@ async function submitItemForm(e: Event): Promise<void> {
 
   const res = await apiRequest(path, { method, body: formData, isFormData: true });
   if (res.ok) {
-    showToast(editingItemId ? "Item updated." : "Item added.", "success");
+    showToast(editingItemId ? "Item updated." : "Item added successfully.", "success");
     closeModal("item-modal");
     loadItems();
   } else {
-    showToast("Failed to save item. Please check the form.", "error");
+    let errorMsg = "Failed to save item. Please check the form.";
+    if (res.data) {
+      const data = res.data as any;
+      if (Array.isArray(data.image) && data.image[0]) {
+        errorMsg = data.image[0];
+      } else if (typeof data.image === "string") {
+        errorMsg = data.image;
+      } else if (data.detail) {
+        errorMsg = data.detail;
+      } else if (data.errors?.detail) {
+        errorMsg = data.errors.detail;
+      }
+    }
+    showToast(errorMsg, "error");
   }
 }
 
@@ -139,35 +152,34 @@ document.addEventListener("DOMContentLoaded", () => {
   qs<HTMLButtonElement>("#add-item-btn").addEventListener("click", openAddModal);
   qs<HTMLFormElement>("#item-form").addEventListener("submit", submitItemForm);
 
+  const searchInput = qs<HTMLInputElement>("#search-input");
+  const clearBtn = qs<HTMLButtonElement>("#clear-search-btn");
+
   const performSearch = () => {
-    currentFilters.search = qs<HTMLInputElement>("#search-input").value;
+    const val = searchInput.value.trim();
+    if (val) {
+      currentFilters.search = val;
+      clearBtn.classList.remove("hidden");
+    } else {
+      delete currentFilters.search;
+      clearBtn.classList.add("hidden");
+    }
     loadItems();
   };
 
-  qs<HTMLButtonElement>("#search-btn").addEventListener("click", performSearch);
-
-  qs<HTMLInputElement>("#search-input").addEventListener("keydown", (e: KeyboardEvent) => {
-    if (e.key === "Enter") {
-      performSearch();
-    }
-  });
-
-  qs<HTMLInputElement>("#search-input").addEventListener(
+  searchInput.addEventListener(
     "input",
-    debounce((e: Event) => {
-      currentFilters.search = (e.target as HTMLInputElement).value;
-      loadItems();
-    }, 350)
+    debounce(() => {
+      performSearch();
+    }, 300)
   );
 
-  qsa<HTMLSelectElement>("[data-filter]").forEach((select) =>
-    select.addEventListener("change", () => {
-      const key = select.dataset.filter!;
-      if (select.value) currentFilters[key] = select.value;
-      else delete currentFilters[key];
-      loadItems();
-    })
-  );
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    delete currentFilters.search;
+    clearBtn.classList.add("hidden");
+    loadItems();
+  });
 
   loadItems();
 });

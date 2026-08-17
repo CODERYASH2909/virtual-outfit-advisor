@@ -13,10 +13,10 @@ class WardrobeItemSerializer(serializers.ModelSerializer):
         fields = [
             "id", "name", "category", "category_display", "color", "secondary_color",
             "brand", "size", "season", "season_display", "occasion", "occasion_display",
-            "material", "image", "notes", "tags", "tag_list", "is_favorite",
+            "material", "image", "original_image", "notes", "tags", "tag_list", "is_favorite",
             "times_worn", "last_worn_at", "purchase_date", "created_at", "updated_at",
         ]
-        read_only_fields = ["id", "created_at", "updated_at", "times_worn"]
+        read_only_fields = ["id", "created_at", "updated_at", "times_worn", "original_image"]
 
     def get_tag_list(self, obj):
         return obj.tag_list()

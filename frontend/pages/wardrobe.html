@@ -23,46 +23,31 @@
         <button id="add-item-btn" class="btn-primary">+ Add Item</button>
       </div>
 
-      <!-- Search & Filters -->
-      <div class="card mb-6 flex flex-wrap items-center gap-3 animate-fade-in-up animate-delay-100">
-        <div class="flex w-full max-w-sm items-center gap-2">
-          <input id="search-input" type="text" placeholder="Search by name, brand, color, tags..." class="input-field" />
-          <button id="search-btn" class="btn-primary !py-2.5 !px-4 text-sm font-semibold">Search</button>
+      <!-- Attractive Search Bar -->
+      <div class="mb-6 animate-fade-in-up animate-delay-100">
+        <div class="relative flex w-full items-center rounded-2xl border border-gray-200/80 bg-white/90 p-1.5 shadow-card transition-all duration-300 backdrop-blur-md hover:shadow-card-hover focus-within:border-voa-500 focus-within:ring-2 focus-within:ring-voa-500/20">
+          <div class="pointer-events-none flex items-center pl-4 text-gray-400">
+            <svg class="h-5 w-5 text-voa-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+          </div>
+          <input 
+            id="search-input" 
+            type="text" 
+            placeholder="Search clothes by name, brand, color, tags..." 
+            class="w-full bg-transparent px-3 py-3 text-sm text-ink-900 placeholder-gray-400 focus:outline-none" 
+          />
+          <button 
+            id="clear-search-btn" 
+            type="button"
+            class="mr-1 hidden rounded-xl p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600" 
+            title="Clear search"
+          >
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-        <select data-filter="category" class="input-field w-auto">
-          <option value="">All Categories</option>
-          <option value="top">Top</option>
-          <option value="bottom">Bottom</option>
-          <option value="dress">Dress</option>
-          <option value="outerwear">Outerwear</option>
-          <option value="footwear">Footwear</option>
-          <option value="accessory">Accessory</option>
-          <option value="headwear">Headwear</option>
-          <option value="bag">Bag</option>
-          <option value="innerwear">Innerwear</option>
-          <option value="sportswear">Sportswear</option>
-        </select>
-        <select data-filter="season" class="input-field w-auto">
-          <option value="">All Seasons</option>
-          <option value="summer">Summer</option>
-          <option value="winter">Winter</option>
-          <option value="spring">Spring</option>
-          <option value="autumn">Autumn</option>
-          <option value="rainy">Rainy</option>
-          <option value="all_season">All Season</option>
-        </select>
-        <select data-filter="occasion" class="input-field w-auto">
-          <option value="">All Occasions</option>
-          <option value="casual">Casual</option>
-          <option value="formal">Formal</option>
-          <option value="business">Business</option>
-          <option value="party">Party</option>
-          <option value="sports">Sports</option>
-          <option value="travel">Travel</option>
-          <option value="beach">Beach</option>
-          <option value="wedding">Wedding</option>
-          <option value="loungewear">Loungewear</option>
-        </select>
       </div>
 
       <div id="wardrobe-grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"></div>

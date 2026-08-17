@@ -168,6 +168,19 @@
   .modal-overlay.active {
     @apply flex;
   }
+
+  /* Virtual Try-On Utilities */
+  .tryon-dropzone {
+    @apply relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white/60 p-6 text-center transition-all duration-300 cursor-pointer;
+  }
+
+  .tryon-dropzone:hover {
+    @apply border-voa-500 bg-voa-50/40;
+  }
+
+  .tryon-photo-frame {
+    @apply relative overflow-hidden rounded-2xl border border-gray-100 bg-slate-900/5 transition-all;
+  }
 }
 
 @keyframes brand-cube-float {

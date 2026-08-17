@@ -11,6 +11,7 @@ urlpatterns = [
     path("api/travel/", include("travel.urls")),
     path("api/favorites/", include("favorites.urls")),
     path("api/clothing/", include("clothing_detection.urls")),
+    path("api/tryon/", include("virtual_tryon.urls")),
 ]
 
 if settings.DEBUG:

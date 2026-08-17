@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "favorites",
     "core",
     "clothing_detection",
+    "virtual_tryon",
 ]
 
 MIDDLEWARE = [
@@ -187,7 +188,7 @@ EMAIL_BACKEND = config(
 )
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="no-reply@voa.local")
 
-# --- Clothing Detection (YOLOv8) ---
+# --- Clothing Detection (YOLOv8 — DeepFashion2 fashion-trained model) ---
 CLOTHING_DETECTION = {
     "CONFIDENCE_THRESHOLD": config("CLOTHING_DETECTION_CONFIDENCE", default=0.25, cast=float),
     "MAX_IMAGE_SIZE_MB": config("CLOTHING_DETECTION_MAX_IMAGE_MB", default=10, cast=int),
@@ -197,3 +198,6 @@ CLOTHING_DETECTION = {
     ),
     "DEFAULT_WEIGHTS": config("CLOTHING_DETECTION_DEFAULT_WEIGHTS", default="yolov8n.pt"),
 }
+
+# --- Virtual Try-On (CatVTON via Hugging Face Spaces) ---
+HUGGINGFACE_TOKEN = config("HUGGINGFACE_TOKEN", default="")
