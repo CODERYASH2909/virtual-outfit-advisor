@@ -47,8 +47,8 @@ function renderItemCard(item: WardrobeItem): string {
     <button data-fav-id="${item.id}" class="absolute right-4 top-4 z-10 rounded-full bg-white/90 p-2 shadow-sm transition hover:scale-110">
       <span class="${item.is_favorite ? "text-rose-500" : "text-gray-300"}">&#9829;</span>
     </button>
-    <div class="mb-4 h-40 w-full overflow-hidden rounded-lg bg-voa-50">
-      ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" alt="${item.name}" />` : `<div class="flex h-full items-center justify-center text-voa-300 text-sm">No Image</div>`}
+    <div class="mb-4 flex h-44 w-full items-center justify-center overflow-hidden rounded-xl bg-gradient-to-b from-gray-50/80 to-voa-50/40 p-3 shadow-inner border border-gray-100/80">
+      ${item.image ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-105" alt="${item.name}" />` : `<div class="flex h-full items-center justify-center text-voa-300 text-sm">No Image</div>`}
     </div>
     <h3 class="font-semibold text-ink-900">${item.name}</h3>
     <p class="text-xs text-gray-500 mb-2">${item.brand || "No brand"}</p>
@@ -103,44 +103,58 @@ function openAddModal(): void {
 
 async function submitItemForm(e: Event): Promise<void> {
   e.preventDefault();
-  const formData = new FormData();
-  formData.append("name", qs<HTMLInputElement>("#item-name").value);
-  formData.append("category", qs<HTMLSelectElement>("#item-category").value);
-  formData.append("color", qs<HTMLInputElement>("#item-color").value);
-  formData.append("season", qs<HTMLSelectElement>("#item-season").value);
-  formData.append("occasion", qs<HTMLSelectElement>("#item-occasion").value);
-  formData.append("brand", qs<HTMLInputElement>("#item-brand").value);
-  formData.append("notes", qs<HTMLTextAreaElement>("#item-notes").value);
-  formData.append("tags", qs<HTMLInputElement>("#item-tags").value);
+
+  const submitBtn = qs<HTMLButtonElement>("#item-form button[type='submit']");
+  const origBtnText = submitBtn.textContent || "Save Item";
 
   const fileInput = qs<HTMLInputElement>("#item-image");
-  if (fileInput.files && fileInput.files[0]) {
-    formData.append("image", fileInput.files[0]);
-  }
+  const hasFile = fileInput.files && fileInput.files[0];
 
-  const path = editingItemId ? `/wardrobe/items/${editingItemId}/` : "/wardrobe/items/";
-  const method = editingItemId ? "PATCH" : "POST";
+  submitBtn.disabled = true;
+  submitBtn.textContent = hasFile ? "Isolating Garment..." : "Saving Item...";
 
-  const res = await apiRequest(path, { method, body: formData, isFormData: true });
-  if (res.ok) {
-    showToast(editingItemId ? "Item updated." : "Item added successfully.", "success");
-    closeModal("item-modal");
-    loadItems();
-  } else {
-    let errorMsg = "Failed to save item. Please check the form.";
-    if (res.data) {
-      const data = res.data as any;
-      if (Array.isArray(data.image) && data.image[0]) {
-        errorMsg = data.image[0];
-      } else if (typeof data.image === "string") {
-        errorMsg = data.image;
-      } else if (data.detail) {
-        errorMsg = data.detail;
-      } else if (data.errors?.detail) {
-        errorMsg = data.errors.detail;
-      }
+  try {
+    const formData = new FormData();
+    formData.append("name", qs<HTMLInputElement>("#item-name").value);
+    formData.append("category", qs<HTMLSelectElement>("#item-category").value);
+    formData.append("color", qs<HTMLInputElement>("#item-color").value);
+    formData.append("season", qs<HTMLSelectElement>("#item-season").value);
+    formData.append("occasion", qs<HTMLSelectElement>("#item-occasion").value);
+    formData.append("brand", qs<HTMLInputElement>("#item-brand").value);
+    formData.append("notes", qs<HTMLTextAreaElement>("#item-notes").value);
+    formData.append("tags", qs<HTMLInputElement>("#item-tags").value);
+
+    if (hasFile) {
+      formData.append("image", fileInput.files![0]);
     }
-    showToast(errorMsg, "error");
+
+    const path = editingItemId ? `/wardrobe/items/${editingItemId}/` : "/wardrobe/items/";
+    const method = editingItemId ? "PATCH" : "POST";
+
+    const res = await apiRequest(path, { method, body: formData, isFormData: true });
+    if (res.ok) {
+      showToast(hasFile ? "Garment isolated & item saved successfully." : (editingItemId ? "Item updated." : "Item added."), "success");
+      closeModal("item-modal");
+      loadItems();
+    } else {
+      let errorMsg = "Failed to save item. Please check the form.";
+      if (res.data) {
+        const data = res.data as any;
+        if (Array.isArray(data.image) && data.image[0]) {
+          errorMsg = data.image[0];
+        } else if (typeof data.image === "string") {
+          errorMsg = data.image;
+        } else if (data.detail) {
+          errorMsg = data.detail;
+        } else if (data.errors?.detail) {
+          errorMsg = data.errors.detail;
+        }
+      }
+      showToast(errorMsg, "error");
+    }
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = origBtnText;
   }
 }
 

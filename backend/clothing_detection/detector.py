@@ -199,7 +199,16 @@ class ClothingDetector:
             self._class_index = self._build_class_index()
 
     def detect(self, image_path: str | Path) -> list[dict[str, Any]]:
-        """Run detection and return normalized clothing detections."""
+        """Run detection and return normalized clothing detections.
+
+        Each detection dict contains:
+        - category: canonical category name (e.g. "Shirt", "Pants")
+        - raw_label: the original model label (e.g. "long_sleeved_shirt", "trousers")
+        - confidence: detection confidence score
+        - bounding_box: [x1, y1, x2, y2] in pixel coordinates
+        - mask_polygon: list of [x, y] polygon vertices (original image coords)
+        - mask_data: numpy array of the segmentation mask at original image resolution
+        """
         self._ensure_model()
 
         conf_threshold = float(self._settings.get("CONFIDENCE_THRESHOLD", 0.25))
@@ -208,29 +217,79 @@ class ClothingDetector:
 
         for result in results:
             boxes = getattr(result, "boxes", None)
+            masks = getattr(result, "masks", None)
             if boxes is None:
                 continue
 
-            for box in boxes:
+            mask_xys = getattr(masks, "xy", None) if masks is not None else None
+            # masks.data is a tensor of shape (N, H, W) with float values 0..1
+            mask_tensors = getattr(masks, "data", None) if masks is not None else None
+            orig_shape = getattr(result, "orig_shape", None)  # (H, W)
+
+            for idx, box in enumerate(boxes):
                 class_id = int(box.cls[0])
                 category = self._class_index.get(class_id)
+
+                # Retrieve raw model label for logging/debugging
+                model_names = getattr(self._model, "names", {})
+                raw_label = str(model_names.get(class_id, f"unknown_{class_id}"))
+
                 if category is None:
+                    logger.debug(
+                        "Skipping unmapped class %s (%r) with no category mapping",
+                        class_id, raw_label,
+                    )
                     continue
 
                 confidence = float(box.conf[0])
                 x1, y1, x2, y2 = box.xyxy[0].tolist()
-                detections.append(
-                    {
-                        "category": category,
-                        "confidence": round(confidence, 4),
-                        "bounding_box": [
-                            round(float(x1), 2),
-                            round(float(y1), 2),
-                            round(float(x2), 2),
-                            round(float(y2), 2),
-                        ],
-                    }
+
+                logger.info(
+                    "Detection: class=%s raw_label=%r → category=%s conf=%.4f "
+                    "bbox=[%.1f, %.1f, %.1f, %.1f]",
+                    class_id, raw_label, category, confidence, x1, y1, x2, y2,
                 )
+
+                det_dict: dict[str, Any] = {
+                    "category": category,
+                    "raw_label": raw_label,
+                    "confidence": round(confidence, 4),
+                    "bounding_box": [
+                        round(float(x1), 2),
+                        round(float(y1), 2),
+                        round(float(x2), 2),
+                        round(float(y2), 2),
+                    ],
+                    "mask_polygon": None,
+                    "mask_data": None,
+                }
+
+                if mask_xys is not None and idx < len(mask_xys):
+                    polygon = mask_xys[idx]
+                    if hasattr(polygon, "tolist"):
+                        det_dict["mask_polygon"] = polygon.tolist()
+                    elif isinstance(polygon, list):
+                        det_dict["mask_polygon"] = polygon
+
+                # Provide the pixel-accurate mask tensor resized to original image dims
+                if mask_tensors is not None and idx < len(mask_tensors):
+                    import cv2
+                    mask_tensor = mask_tensors[idx].cpu().numpy()  # (mask_H, mask_W)
+                    if orig_shape is not None:
+                        oh, ow = int(orig_shape[0]), int(orig_shape[1])
+                        if mask_tensor.shape != (oh, ow):
+                            mask_tensor = cv2.resize(
+                                mask_tensor, (ow, oh),
+                                interpolation=cv2.INTER_LINEAR,
+                            )
+                    det_dict["mask_data"] = (mask_tensor > 0.5).astype("uint8")
+                    mask_pixels = int(det_dict["mask_data"].sum())
+                    logger.info(
+                        "  Segmentation mask: shape=%s, garment_pixels=%d",
+                        det_dict["mask_data"].shape, mask_pixels,
+                    )
+
+                detections.append(det_dict)
 
         return detections
 

@@ -36,6 +36,8 @@ class _Box:
 class _Result:
     def __init__(self, boxes):
         self.boxes = boxes
+        self.masks = None
+        self.orig_shape = None
 
 
 class _FakeModel:
@@ -84,13 +86,19 @@ class ClothingDetectorTests(SimpleTestCase):
             [
                 {
                     "category": "Bag",
+                    "raw_label": "handbag",
                     "confidence": 0.8765,
                     "bounding_box": [1.23, 2.35, 30.46, 40.57],
+                    "mask_polygon": None,
+                    "mask_data": None,
                 },
                 {
                     "category": "Shirt",
+                    "raw_label": "long_sleeve_shirt",
                     "confidence": 0.6543,
                     "bounding_box": [5.0, 6.0, 70.0, 80.0],
+                    "mask_polygon": None,
+                    "mask_data": None,
                 },
             ],
         )

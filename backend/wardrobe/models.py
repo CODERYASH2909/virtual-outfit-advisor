@@ -48,7 +48,6 @@ class WardrobeItem(models.Model):
     occasion = models.CharField(max_length=20, choices=OCCASION_CHOICES, default="casual")
     material = models.CharField(max_length=80, blank=True)
     image = models.ImageField(upload_to="wardrobe/", blank=True, null=True, help_text="Clean garment-only image")
-    original_image = models.ImageField(upload_to="wardrobe/originals/", blank=True, null=True, help_text="Raw uploaded image reference")
     notes = models.TextField(blank=True)
     tags = models.CharField(max_length=255, blank=True, help_text="Comma-separated tags")
     is_favorite = models.BooleanField(default=False)

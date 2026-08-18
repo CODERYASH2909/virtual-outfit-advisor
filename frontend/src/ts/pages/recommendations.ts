@@ -189,8 +189,8 @@ function setSelectedRecommendation(rec: Recommendation): void {
     </div>
     <div class="space-y-2">
       ${rec.items_detail
-        .map(
-          (item) => `
+      .map(
+        (item) => `
         <div class="flex items-center justify-between text-gray-700 bg-gray-50/60 p-2 rounded-xl border border-gray-100/60">
           <div class="flex items-center gap-2">
             <span class="text-[10px] font-semibold uppercase bg-white border border-gray-200 text-gray-600 px-1.5 py-0.5 rounded-md min-w-[55px] text-center">${item.category}</span>
@@ -199,8 +199,8 @@ function setSelectedRecommendation(rec: Recommendation): void {
           <span class="text-[10px] text-gray-400 font-medium capitalize">${item.color}</span>
         </div>
       `
-        )
-        .join("")}
+      )
+      .join("")}
     </div>
   `;
 }
@@ -252,7 +252,7 @@ async function generateVirtualTryOn(): Promise<void> {
     resultState.classList.remove("hidden");
     const resultImg = qs<HTMLImageElement>("#tryon-result-img");
     resultImg.src = getImageUrl(res.data.result.result_image) || "";
-    
+
     const applied = res.data.items_processed
       ? res.data.items_processed.filter((p: ProcessedItem) => p.status === "applied")
       : [];
@@ -310,21 +310,20 @@ function renderRecommendation(rec: Recommendation): void {
       </div>
       <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
         ${rec.items_detail
-          .map(
-            (item) => `
+      .map(
+        (item) => `
           <div class="rounded-xl border border-gray-100 p-3 text-center bg-white shadow-xs">
             <div class="mb-2 h-36 w-full overflow-hidden rounded-lg bg-voa-50/50">
-              ${
-                item.image
-                  ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" />`
-                  : `<div class="flex h-full items-center justify-center text-xs text-voa-300">No Image</div>`
-              }
+              ${item.image
+            ? `<img src="${getImageUrl(item.image)}" class="h-full w-full object-cover" />`
+            : `<div class="flex h-full items-center justify-center text-xs text-voa-300">No Image</div>`
+          }
             </div>
             <p class="truncate text-xs font-semibold text-ink-900">${item.name}</p>
             <p class="text-[10px] text-gray-400 capitalize">${item.category} &middot; ${item.color}</p>
           </div>`
-          )
-          .join("")}
+      )
+      .join("")}
       </div>
       <p class="text-xs text-gray-600 bg-gray-50/70 p-3 rounded-xl border border-gray-100">${rec.notes}</p>
     </div>

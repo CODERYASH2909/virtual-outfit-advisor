@@ -3,215 +3,356 @@
 Isolates clothing items from user-uploaded images containing human models or complex backgrounds.
 Produces a clean garment-only image on a transparent background for Virtual Try-On, preserving
 all original garment colors, shapes, patterns, sleeves, hoods, collars, buttons, and hems.
+
+Pipeline:
+    1. Run YOLO segmentation → pixel-accurate mask at original resolution
+    2. Light mask cleanup (fill tiny holes, remove tiny blobs)
+    3. Apply mask to original image → RGBA with transparent background
+    4. Validate mask integrity (not fragmented, covers reasonable area)
+    5. Crop to garment bounding box with padding → save clean transparent PNG
 """
 
 from __future__ import annotations
 
+import os
 import logging
 import uuid
 from pathlib import Path
 from typing import Any
 
+import cv2
 import numpy as np
 from PIL import Image, ImageOps
 from django.conf import settings
 
-from .detector import ClothingDetector, LABEL_TO_CATEGORY
+from .detector import ClothingDetector
 
 logger = logging.getLogger(__name__)
 
-# Map detailed detector labels to WardrobeItem model CATEGORY_CHOICES
+# ---------------------------------------------------------------------------
+# Category mapping: detector canonical label → WardrobeItem.CATEGORY_CHOICES
+# ---------------------------------------------------------------------------
 DETECTOR_CATEGORY_TO_WARDROBE_CATEGORY: dict[str, str] = {
+    # Tops
     "Shirt": "top",
     "T-Shirt": "top",
     "Hoodie": "top",
+    "Sweater": "top",
+    # Outerwear (treated as separate category)
     "Jacket": "outerwear",
     "Blazer": "outerwear",
-    "Sweater": "top",
+    # Bottoms
     "Jeans": "bottom",
     "Pants": "bottom",
     "Shorts": "bottom",
+    # Skirt
     "Skirt": "bottom",
+    # Full body
     "Dress": "dress",
+    # Footwear
     "Shoes": "footwear",
     "Sneakers": "footwear",
     "Sandals": "footwear",
+    # Headwear
     "Cap": "headwear",
     "Hat": "headwear",
+    # Accessories
     "Belt": "accessory",
     "Bag": "bag",
 }
 
+# Categories that are "top" type — used for garment-specific validation
+TOP_CATEGORIES = {"Shirt", "T-Shirt", "Hoodie", "Sweater"}
+BOTTOM_CATEGORIES = {"Jeans", "Pants", "Shorts", "Skirt"}
+DRESS_CATEGORIES = {"Dress"}
+OUTERWEAR_CATEGORIES = {"Jacket", "Blazer"}
 
-def remove_skin_pixels(img_rgba: Image.Image, confidence_mask: np.ndarray | None = None) -> Image.Image:
-    """Filter out human skin regions (head/neck, bare arms/hands, bare legs) attached to garment edges.
 
-    Uses HSV color space skin detection to set skin pixel alpha to transparent,
-    while leaving garment colors intact.
+def _cleanup_mask(mask: np.ndarray, min_blob_ratio: float = 0.01) -> np.ndarray:
+    """Light mask cleanup: fill small holes and remove tiny disconnected blobs.
+
+    Args:
+        mask: Binary mask (uint8, 0 or 1).
+        min_blob_ratio: Blobs smaller than this fraction of the largest blob are removed.
+
+    Returns:
+        Cleaned binary mask (uint8, 0 or 1).
     """
-    arr = np.array(img_rgba)
-    if arr.shape[2] < 4:
-        return img_rgba
+    if mask.sum() == 0:
+        return mask
 
-    rgb = arr[:, :, :3]
-    alpha = arr[:, :, 3]
+    # 1. Morphological close to fill tiny aliasing gaps (3×3 kernel, 1 iteration)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+    closed = cv2.morphologyEx(mask * 255, cv2.MORPH_CLOSE, kernel, iterations=1)
 
-    # Convert RGB to HSV using PIL or numpy math
-    pil_rgb = Image.fromarray(rgb, mode="RGB")
-    hsv = np.array(pil_rgb.convert("HSV"))
+    # 2. Fill small interior holes using flood-fill approach
+    # Invert, find external contours (these are holes), fill small ones
+    filled = closed.copy()
+    contours_holes, _ = cv2.findContours(
+        255 - filled, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+    )
+    total_mask_area = float(np.count_nonzero(filled))
+    if total_mask_area > 0:
+        for cnt in contours_holes:
+            hole_area = cv2.contourArea(cnt)
+            if hole_area < total_mask_area * 0.05:  # fill holes < 5% of mask
+                cv2.drawContours(filled, [cnt], -1, 255, cv2.FILLED)
 
-    h = hsv[:, :, 0]  # 0 - 255
-    s = hsv[:, :, 1]  # 0 - 255
-    v = hsv[:, :, 2]  # 0 - 255
+    # 3. Remove tiny disconnected blobs
+    num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(filled, connectivity=8)
+    if num_labels <= 1:
+        return (filled > 127).astype(np.uint8)
 
-    # Human skin HSV range in PIL's 0-255 scale:
-    # Hue: 0-35 (approx 0-50 degrees) or 220-255 (reddish tones)
-    # Saturation: 30-170
-    # Value: 60-255
-    skin_h = ((h <= 35) | (h >= 220))
-    skin_s = (s >= 25) & (s <= 180)
-    skin_v = (v >= 50)
+    # Find the largest component (excluding background label 0)
+    areas = stats[1:, cv2.CC_STAT_AREA]
+    max_area = areas.max()
+    threshold_area = max_area * min_blob_ratio
 
-    skin_mask = skin_h & skin_s & skin_v
+    clean = np.zeros_like(filled)
+    for label_id in range(1, num_labels):
+        if stats[label_id, cv2.CC_STAT_AREA] >= threshold_area:
+            clean[labels == label_id] = 255
 
-    # Apply skin transparency only where alpha is already somewhat transparent or near outer edges
-    # to avoid modifying internal garment patterns of beige/tan clothes.
-    # We create a new alpha channel where detected edge skin is zeroed out.
-    new_alpha = alpha.copy()
+    result = (clean > 127).astype(np.uint8)
+    logger.debug(
+        "Mask cleanup: %d components found, %d kept (threshold=%d px)",
+        num_labels - 1,
+        np.count_nonzero(np.unique(labels[clean > 127])),
+        int(threshold_area),
+    )
+    return result
 
-    # If we have a skin mask, zero out skin alpha
-    # (Skin removal is done conservatively: only where skin_mask is True and alpha > 0)
-    # To protect skin-colored clothes, we check if skin region forms tiny attached strips at margins
-    rows, cols = alpha.shape
-    margin_top = int(rows * 0.18)  # neck region
-    margin_bottom = int(rows * 0.85)  # ankles/feet region
 
-    # Zero skin in top margin (neck/chin) and bottom margin (legs/feet)
-    top_skin = skin_mask[:margin_top, :]
-    new_alpha[:margin_top, :][top_skin] = 0
+def _validate_mask(
+    mask: np.ndarray,
+    bbox: list[float],
+    category: str,
+    min_coverage: float = 0.15,
+    max_components: int = 5,
+) -> tuple[bool, str]:
+    """Validate that the segmentation mask is not fragmented or too small.
 
-    bottom_skin = skin_mask[margin_bottom:, :]
-    new_alpha[margin_bottom:, :][bottom_skin] = 0
+    Args:
+        mask: Binary mask (uint8, 0 or 1).
+        bbox: [x1, y1, x2, y2] bounding box from YOLO.
+        category: Detected canonical category name.
+        min_coverage: Minimum fraction of bbox area that mask must cover.
+        max_components: Maximum allowed connected components.
 
-    arr[:, :, 3] = new_alpha
-    return Image.fromarray(arr, mode="RGBA")
+    Returns:
+        (is_valid, reason_if_invalid)
+    """
+    mask_pixels = int(mask.sum())
+    if mask_pixels < 500:
+        return False, f"Segmentation mask too small ({mask_pixels} pixels)"
+
+    # Check coverage relative to bounding box
+    x1, y1, x2, y2 = bbox
+    bbox_area = (x2 - x1) * (y2 - y1)
+    if bbox_area > 0:
+        coverage = mask_pixels / bbox_area
+        if coverage < min_coverage:
+            return False, (
+                f"Garment mask covers only {coverage:.1%} of the detection bounding box "
+                f"(minimum {min_coverage:.0%} required). The garment may be fragmented."
+            )
+        logger.info("  Mask coverage: %.1f%% of bbox area", coverage * 100)
+
+    # Check connected components
+    mask_255 = (mask * 255).astype(np.uint8)
+    num_labels, _, _, _ = cv2.connectedComponentsWithStats(mask_255, connectivity=8)
+    num_components = num_labels - 1  # exclude background
+    if num_components > max_components:
+        return False, (
+            f"Garment mask is severely fragmented ({num_components} disconnected pieces). "
+            f"Please upload a clearer image."
+        )
+    logger.info("  Mask components: %d (max allowed: %d)", num_components, max_components)
+
+    return True, ""
 
 
 def isolate_garment(image_input: str | Path | Any) -> tuple[bool, str, str | None, str | None]:
     """Isolate garment from uploaded image, removing person body & background.
 
+    Uses YOLO segmentation mask as the primary garment boundary. No rembg.
+    No aggressive skin removal. Validates mask integrity before saving.
+
     Args:
         image_input: Path to uploaded image file.
 
     Returns:
-        tuple of (success: bool, message: str, clean_image_path: str | None, detected_category: str | None)
+        tuple of (success, message, clean_image_path, detected_wardrobe_category)
     """
     image_path = str(image_input)
+    if not os.path.exists(image_path):
+        return (
+            False,
+            "Could not process the uploaded image. File does not exist.",
+            None,
+            None,
+        )
 
-    # 1. Run YOLO clothing detector
+    # ── 1. Run YOLO clothing detector ────────────────────────────────
     detector = ClothingDetector.get_instance()
     try:
         detections = detector.detect(image_path)
     except Exception as exc:
         logger.warning("YOLO detection failed on %s: %s", image_path, exc)
-        detections = []
+        return (
+            False,
+            "Clothing detection failed. Please try again with a different image.",
+            None,
+            None,
+        )
 
-    # Filter detections by confidence threshold (0.20 for garment isolation)
-    min_confidence = 0.20
+    # Filter by minimum confidence
+    min_confidence = 0.30
     valid_detections = [d for d in detections if d.get("confidence", 0) >= min_confidence]
 
-    # If no valid garment detected with reasonable confidence:
     if not valid_detections:
-        # Fall back to rembg check: see if rembg can find a distinct object in center
-        logger.info("No high-confidence YOLO detection for %s; trying direct rembg extraction.", image_path)
+        logger.warning(
+            "No clothing detected with confidence >= %.2f in %s (raw detections: %d)",
+            min_confidence, image_path, len(detections),
+        )
+        return (
+            False,
+            "Could not detect any clothing item in the uploaded photo. "
+            "Please upload a clear image of a single garment.",
+            None,
+            None,
+        )
 
-    # Pick highest-confidence detection if present
-    primary_det = max(valid_detections, key=lambda x: x["confidence"]) if valid_detections else None
-    detected_cat_name = primary_det["category"] if primary_det else None
-    wardrobe_category = DETECTOR_CATEGORY_TO_WARDROBE_CATEGORY.get(detected_cat_name) if detected_cat_name else None
+    # Pick the detection with highest confidence
+    primary_det = max(valid_detections, key=lambda x: x["confidence"])
+    detected_category = primary_det["category"]
+    raw_label = primary_det.get("raw_label", "unknown")
+    confidence = primary_det["confidence"]
+    wardrobe_category = DETECTOR_CATEGORY_TO_WARDROBE_CATEGORY.get(detected_category)
 
-    # 2. Open image and process background removal
+    logger.info(
+        "Primary detection: raw_label=%r → category=%s → wardrobe=%s (conf=%.4f)",
+        raw_label, detected_category, wardrobe_category, confidence,
+    )
+
+    # ── 2. Verify we have a segmentation mask ────────────────────────
+    mask_data = primary_det.get("mask_data")
+    if mask_data is None:
+        logger.warning("No segmentation mask available for detection in %s", image_path)
+        return (
+            False,
+            "The clothing detection model could not produce a segmentation mask. "
+            "Please try a different image.",
+            None,
+            wardrobe_category,
+        )
+
+    # ── 3. Open original image ───────────────────────────────────────
     try:
         with Image.open(image_path) as orig_img:
             img = ImageOps.exif_transpose(orig_img).convert("RGBA")
             orig_w, orig_h = img.size
+            img_array = np.array(img)  # (H, W, 4)
 
-            # If YOLO detected a bounding box, expand it slightly with 15% safety padding
-            if primary_det and "bounding_box" in primary_det:
-                x1, y1, x2, y2 = primary_det["bounding_box"]
-                bw = x2 - x1
-                bh = y2 - y1
-                pad_x = bw * 0.12
-                pad_y = bh * 0.12
-
-                cx1 = max(0, int(x1 - pad_x))
-                cy1 = max(0, int(y1 - pad_y))
-                cx2 = min(orig_w, int(x2 + pad_x))
-                cy2 = min(orig_h, int(y2 + pad_y))
-
-                crop_img = img.crop((cx1, cy1, cx2, cy2))
-            else:
-                crop_img = img
-
-            # 3. Apply rembg background & body removal
-            has_bg_removed = False
-            try:
-                from rembg import remove
-                bg_removed = remove(crop_img)
-                alpha = bg_removed.split()[-1]
-                bbox = alpha.getbbox()
-                if bbox and (bbox[2] - bbox[0] > 30) and (bbox[3] - bbox[1] > 30):
-                    clean_img = bg_removed
-                    has_bg_removed = True
-                else:
-                    clean_img = crop_img
-            except Exception as exc:
-                logger.warning("Rembg background removal skipped for %s (%s)", image_path, exc)
-                clean_img = crop_img
-
-            # 4. Apply conservative skin/body removal for neck/feet edges
-            if has_bg_removed:
-                clean_img = remove_skin_pixels(clean_img)
-
-            # 5. Crop to exact non-transparent bounding box with 12px safety padding
-            alpha = clean_img.split()[-1]
-            bbox = alpha.getbbox()
-
-            if not bbox or (bbox[2] - bbox[0] < 40) or (bbox[3] - bbox[1] < 40):
-                return (
-                    False,
-                    "Could not confidently isolate the clothing item from the uploaded image. "
-                    "Please upload a clearer image of the garment on a simple background.",
-                    None,
-                    wardrobe_category,
-                )
-
-            pad = 12
-            final_crop_box = (
-                max(0, bbox[0] - pad),
-                max(0, bbox[1] - pad),
-                min(clean_img.width, bbox[2] + pad),
-                min(clean_img.height, bbox[3] + pad),
-            )
-            final_garment = clean_img.crop(final_crop_box)
-
-            # 6. Save clean garment image
-            clean_dir = Path(settings.MEDIA_ROOT) / "wardrobe" / "clean"
-            clean_dir.mkdir(parents=True, exist_ok=True)
-            filename = f"garment_clean_{uuid.uuid4().hex[:12]}.png"
-            target_path = clean_dir / filename
-
-            final_garment.save(target_path, "PNG", quality=95)
-            logger.info("Successfully isolated clean garment image: %s", target_path)
-
-            rel_path = f"wardrobe/clean/{filename}"
-            return True, "Garment successfully isolated.", rel_path, wardrobe_category
+        logger.info("Original image: %dx%d", orig_w, orig_h)
 
     except Exception as exc:
-        logger.error("Garment isolation processing error for %s: %s", image_path, exc)
+        logger.error("Failed to open image %s: %s", image_path, exc)
         return (
             False,
-            "Could not process the uploaded image. Please ensure it is a valid JPG, PNG, or WebP photo of a clothing item.",
+            "Could not process the uploaded image. Please ensure it is a valid image file.",
             None,
             None,
         )
+
+    # ── 4. Ensure mask matches image dimensions ──────────────────────
+    mask_h, mask_w = mask_data.shape[:2]
+    if (mask_h, mask_w) != (orig_h, orig_w):
+        logger.info(
+            "Resizing mask from %dx%d to %dx%d to match image",
+            mask_w, mask_h, orig_w, orig_h,
+        )
+        mask_data = cv2.resize(
+            mask_data.astype(np.uint8), (orig_w, orig_h),
+            interpolation=cv2.INTER_NEAREST,
+        )
+
+    # ── 5. Clean up the mask (fill tiny holes, remove small blobs) ──
+    clean_mask = _cleanup_mask(mask_data, min_blob_ratio=0.01)
+    logger.info(
+        "Mask after cleanup: %d garment pixels (was %d)",
+        int(clean_mask.sum()), int(mask_data.sum()),
+    )
+
+    # ── 6. Validate mask integrity ───────────────────────────────────
+    is_valid, reason = _validate_mask(
+        clean_mask, primary_det["bounding_box"], detected_category,
+    )
+    if not is_valid:
+        logger.warning("Mask validation failed for %s: %s", image_path, reason)
+        return (False, reason, None, wardrobe_category)
+
+    # ── 7. Apply mask to original image → transparent RGBA ───────────
+    # Set alpha channel: 255 where garment, 0 where not
+    result_array = img_array.copy()
+    result_array[:, :, 3] = clean_mask * 255
+
+    result_img = Image.fromarray(result_array, mode="RGBA")
+
+    # ── 8. Crop to non-transparent bounding box with padding ─────────
+    alpha_channel = result_img.split()[-1]
+    bbox = alpha_channel.getbbox()
+    if not bbox:
+        return (
+            False,
+            "Could not isolate the garment — the resulting image was empty. "
+            "Please try a different photo.",
+            None,
+            wardrobe_category,
+        )
+
+    pad = 10
+    final_crop_box = (
+        max(0, bbox[0] - pad),
+        max(0, bbox[1] - pad),
+        min(orig_w, bbox[2] + pad),
+        min(orig_h, bbox[3] + pad),
+    )
+    final_garment = result_img.crop(final_crop_box)
+
+    crop_w = final_crop_box[2] - final_crop_box[0]
+    crop_h = final_crop_box[3] - final_crop_box[1]
+    logger.info(
+        "Final garment crop: %dx%d (from bbox [%d,%d,%d,%d] + %dpx padding)",
+        crop_w, crop_h, bbox[0], bbox[1], bbox[2], bbox[3], pad,
+    )
+
+    # ── 9. Final quality check ───────────────────────────────────────
+    final_alpha = np.array(final_garment.split()[-1])
+    solid_pixels = np.count_nonzero(final_alpha > 0)
+    if solid_pixels < 1000:
+        return (
+            False,
+            "The isolated garment is too small or incomplete. "
+            "Please upload a clearer, larger image of the clothing item.",
+            None,
+            wardrobe_category,
+        )
+
+    # ── 10. Save clean transparent PNG ───────────────────────────────
+    clean_dir = Path(settings.MEDIA_ROOT) / "wardrobe" / "clean"
+    clean_dir.mkdir(parents=True, exist_ok=True)
+    filename = f"garment_clean_{uuid.uuid4().hex[:12]}.png"
+    target_path = clean_dir / filename
+
+    final_garment.save(target_path, "PNG")
+    rel_path = f"wardrobe/clean/{filename}"
+
+    logger.info(
+        "✓ Garment isolated successfully: path=%s, category=%s→%s, "
+        "confidence=%.4f, raw_label=%r, solid_pixels=%d, size=%dx%d",
+        rel_path, detected_category, wardrobe_category,
+        confidence, raw_label, solid_pixels, crop_w, crop_h,
+    )
+
+    return True, "Garment successfully isolated.", rel_path, wardrobe_category

@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recommendations — Virtual Outfit Advisor</title>
-  <meta name="description" content="Get outfit recommendations built from your own wardrobe, matched by weather and occasion." />
+  <meta name="description"
+    content="Get outfit recommendations built from your own wardrobe, matched by weather and occasion." />
   <link rel="stylesheet" href="/public/assets/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 </head>
+
 <body class="bg-app-gradient">
   <div class="flex min-h-screen">
-    <aside id="sidebar-mount" class="hidden w-64 flex-shrink-0 border-r border-gray-100/60 bg-white/70 backdrop-blur-xl p-5 lg:block scrollbar-thin"></aside>
+    <aside id="sidebar-mount"
+      class="hidden w-64 flex-shrink-0 border-r border-gray-100/60 bg-white/70 backdrop-blur-xl p-5 lg:block scrollbar-thin">
+    </aside>
 
     <main class="flex-1 p-6 md:p-10">
       <div class="mb-8 animate-fade-in-up">
         <h1 class="text-2xl font-bold text-ink-900">Outfit Recommendations</h1>
-        <p class="text-sm text-gray-500">Get an outfit suggestion built from your own wardrobe, matched by weather, season, and occasion.</p>
+        <p class="text-sm text-gray-500">Get an outfit suggestion built from your own wardrobe, matched by weather,
+          season, and occasion.</p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -41,10 +48,15 @@
                 <label class="label" for="rec-city">City</label>
                 <div class="relative flex items-center">
                   <input id="rec-city" class="input-field pr-10 w-full" type="text" placeholder="Ahmedabad" />
-                  <button id="detect-loc-btn" type="button" class="absolute right-3 text-voa-500 hover:text-voa-700 transition-colors focus:outline-none" title="Use current location">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <button id="detect-loc-btn" type="button"
+                    class="absolute right-3 text-voa-500 hover:text-voa-700 transition-colors focus:outline-none"
+                    title="Use current location">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </button>
                 </div>
@@ -69,8 +81,10 @@
 
           <div id="recommendation-result">
             <div class="card text-center py-10 text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-3 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-3 text-gray-300" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               <p class="text-sm font-medium">Select your preferences above and click "Generate Outfit".</p>
             </div>
@@ -85,8 +99,10 @@
               <div>
                 <h2 class="text-lg font-bold text-ink-900 flex items-center gap-2">
                   <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-voa-100 text-voa-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </span>
                   Virtual Try-On
@@ -97,9 +113,11 @@
             </div>
 
             <!-- Modern Inline Alert Message -->
-            <div id="tryon-alert" class="hidden mb-4 px-4 py-3 rounded-xl text-xs flex items-center justify-between shadow-xs transition-all">
+            <div id="tryon-alert"
+              class="hidden mb-4 px-4 py-3 rounded-xl text-xs flex items-center justify-between shadow-xs transition-all">
               <span id="tryon-alert-text"></span>
-              <button id="tryon-alert-close" type="button" class="text-gray-400 hover:text-gray-700 ml-2 font-bold text-base leading-none">&times;</button>
+              <button id="tryon-alert-close" type="button"
+                class="text-gray-400 hover:text-gray-700 ml-2 font-bold text-base leading-none">&times;</button>
             </div>
 
             <!-- SECTION 1: User Photo Section -->
@@ -108,50 +126,64 @@
                 <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">1. Full-Body Photo</h3>
                 <span class="text-[10px] text-gray-400">Required for AI Try-On</span>
               </div>
-              
+
               <!-- State 1A: No Photo Uploaded (Dropzone) -->
               <div id="photo-upload-container">
                 <label class="tryon-dropzone" for="photo-file-input">
-                  <input id="photo-file-input" type="file" accept="image/jpeg,image/jpg,image/png,image/webp" class="hidden" />
-                  <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-voa-50 text-voa-600 shadow-sm border border-voa-100 group-hover:scale-110 group-hover:bg-voa-100 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  <input id="photo-file-input" type="file" accept="image/jpeg,image/jpg,image/png,image/webp"
+                    class="hidden" />
+                  <div
+                    class="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-voa-50 text-voa-600 shadow-sm border border-voa-100 group-hover:scale-110 group-hover:bg-voa-100 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
                   </div>
-                  <p class="text-xs font-semibold text-ink-900 group-hover:text-voa-800 transition-colors">Click or drag full-body photo here</p>
+                  <p class="text-xs font-semibold text-ink-900 group-hover:text-voa-800 transition-colors">Click or drag
+                    full-body photo here</p>
                   <p class="text-[11px] text-gray-400 mt-1">Supports JPG, PNG, WEBP (Max 10MB)</p>
                 </label>
 
                 <!-- Pending local preview before saving -->
-                <div id="photo-pending-preview" class="hidden mt-3 p-4 border border-gray-100 bg-white rounded-2xl shadow-card space-y-3">
+                <div id="photo-pending-preview"
+                  class="hidden mt-3 p-4 border border-gray-100 bg-white rounded-2xl shadow-card space-y-3">
                   <div class="flex items-center justify-between">
                     <p class="text-xs font-semibold text-ink-900">Confirm Photo Upload</p>
                     <span class="text-[10px] font-medium text-gray-400">Preview</span>
                   </div>
-                  <div class="h-52 w-full overflow-hidden rounded-xl bg-slate-900/5 flex items-center justify-center border border-gray-100">
+                  <div
+                    class="h-52 w-full overflow-hidden rounded-xl bg-slate-900/5 flex items-center justify-center border border-gray-100">
                     <img id="photo-pending-img" class="h-full object-contain" alt="Selected photo preview" />
                   </div>
                   <div class="flex gap-2 pt-1">
-                    <button id="photo-confirm-upload-btn" type="button" class="btn-primary text-xs !py-2.5 flex-1 shadow-md">Upload Photo</button>
-                    <button id="photo-cancel-upload-btn" type="button" class="btn-secondary text-xs !py-2.5">Cancel</button>
+                    <button id="photo-confirm-upload-btn" type="button"
+                      class="btn-primary text-xs !py-2.5 flex-1 shadow-md">Upload Photo</button>
+                    <button id="photo-cancel-upload-btn" type="button"
+                      class="btn-secondary text-xs !py-2.5">Cancel</button>
                   </div>
                 </div>
               </div>
 
               <!-- State 1B: Photo Uploaded -->
               <div id="photo-display-container" class="hidden">
-                <div class="tryon-photo-frame h-52 w-full flex items-center justify-center bg-slate-900/5 mb-3 relative">
+                <div
+                  class="tryon-photo-frame h-52 w-full flex items-center justify-center bg-slate-900/5 mb-3 relative">
                   <img id="photo-current-img" class="h-full object-contain" alt="Your saved full-body photo" />
-                  <span class="absolute top-2.5 right-2.5 rounded-full bg-white/90 backdrop-blur-md border border-gray-200/80 px-2.5 py-0.5 text-[10px] font-semibold text-voa-900 shadow-xs">
+                  <span
+                    class="absolute top-2.5 right-2.5 rounded-full bg-white/90 backdrop-blur-md border border-gray-200/80 px-2.5 py-0.5 text-[10px] font-semibold text-voa-900 shadow-xs">
                     Saved Base Character
                   </span>
                 </div>
                 <div class="flex items-center gap-2">
-                  <label for="photo-file-input-replace" class="btn-secondary text-xs !py-2 flex-1 cursor-pointer text-center">
+                  <label for="photo-file-input-replace"
+                    class="btn-secondary text-xs !py-2 flex-1 cursor-pointer text-center">
                     Replace Photo
-                    <input id="photo-file-input-replace" type="file" accept="image/jpeg,image/jpg,image/png,image/webp" class="hidden" />
+                    <input id="photo-file-input-replace" type="file" accept="image/jpeg,image/jpg,image/png,image/webp"
+                      class="hidden" />
                   </label>
-                  <button id="photo-delete-btn" type="button" class="px-4 py-2 text-xs font-semibold rounded-xl text-rose-600 hover:bg-rose-50 hover:text-rose-700 transition-colors">
+                  <button id="photo-delete-btn" type="button"
+                    class="px-4 py-2 text-xs font-semibold rounded-xl text-rose-600 hover:bg-rose-50 hover:text-rose-700 transition-colors">
                     Delete
                   </button>
                 </div>
@@ -165,27 +197,36 @@
               </div>
 
               <!-- State 2A: No Outfit Selected -->
-              <div id="outfit-empty-state" class="rounded-2xl border border-dashed border-gray-200/80 p-5 text-center text-xs text-gray-500 bg-gray-50/40">
+              <div id="outfit-empty-state"
+                class="rounded-2xl border border-dashed border-gray-200/80 p-5 text-center text-xs text-gray-500 bg-gray-50/40">
                 <p>Generate an outfit recommendation on the left to activate Virtual Try-On.</p>
               </div>
 
               <!-- State 2B: Outfit Selected -->
               <div id="outfit-selected-state" class="hidden space-y-4">
-                <div id="outfit-items-summary" class="rounded-2xl border border-gray-100 bg-white p-3.5 space-y-2 text-xs shadow-xs">
+                <div id="outfit-items-summary"
+                  class="rounded-2xl border border-gray-100 bg-white p-3.5 space-y-2 text-xs shadow-xs">
                   <!-- Dynamically filled with selected clothing items -->
                 </div>
 
-                <button id="try-outfit-btn" type="button" class="btn-primary w-full shadow-premium hover:shadow-card-hover text-sm py-3.5">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-voa-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <button id="try-outfit-btn" type="button"
+                  class="btn-primary w-full shadow-premium hover:shadow-card-hover text-sm py-3.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-voa-300" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Try This Outfit
                 </button>
 
-                <p id="tryon-privacy-notice" class="text-[10px] text-gray-400 text-center flex items-center justify-center gap-1 pt-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                <p id="tryon-privacy-notice"
+                  class="text-[10px] text-gray-400 text-center flex items-center justify-center gap-1 pt-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-400 flex-shrink-0" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                   Your photo is securely processed via AI for virtual try-on.
                 </p>
@@ -194,15 +235,19 @@
 
             <!-- SECTION 3: Loading State (Hidden by default) -->
             <div id="tryon-loading-state" class="hidden border-t border-gray-100/80 pt-5 text-center py-6">
-              <div class="inline-flex items-center justify-center p-3.5 bg-voa-50 rounded-2xl text-voa-700 mb-3 animate-bounce shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              <div
+                class="inline-flex items-center justify-center p-3.5 bg-voa-50 rounded-2xl text-voa-700 mb-3 animate-bounce shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                 </svg>
               </div>
               <h4 class="text-sm font-bold text-ink-900">Creating Your Virtual Try-On</h4>
               <p class="text-xs text-gray-500 mt-1">Applying selected wardrobe items to your photo...</p>
-              
-              <div class="mt-4 space-y-2.5 text-left max-w-xs mx-auto text-xs text-gray-600 bg-voa-50/50 p-3.5 rounded-xl border border-voa-100/80">
+
+              <div
+                class="mt-4 space-y-2.5 text-left max-w-xs mx-auto text-xs text-gray-600 bg-voa-50/50 p-3.5 rounded-xl border border-voa-100/80">
                 <div class="flex items-center gap-2.5">
                   <span class="h-2 w-2 rounded-full bg-voa-600 animate-ping"></span>
                   <span class="font-medium text-ink-900">Processing person photo &amp; garment items</span>
@@ -218,15 +263,18 @@
             <div id="tryon-result-state" class="hidden border-t border-gray-100/80 pt-5 space-y-4">
               <div class="flex items-center justify-between">
                 <h3 class="text-xs font-bold text-voa-900 uppercase tracking-wider flex items-center gap-1.5">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-600" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                   Generated Try-On Preview
                 </h3>
               </div>
 
-              <div class="rounded-2xl border border-gray-100 bg-slate-900/5 p-2 overflow-hidden flex items-center justify-center min-h-[260px] shadow-inner">
-                <img id="tryon-result-img" class="w-full h-auto max-h-[400px] object-contain rounded-xl shadow-md" alt="Generated Virtual Try-On result" />
+              <div
+                class="rounded-2xl border border-gray-100 bg-slate-900/5 p-2 overflow-hidden flex items-center justify-center min-h-[260px] shadow-inner">
+                <img id="tryon-result-img" class="w-full h-auto max-h-[400px] object-contain rounded-xl shadow-md"
+                  alt="Generated Virtual Try-On result" />
               </div>
 
               <button id="try-another-btn" type="button" class="btn-secondary w-full text-xs !py-2.5">
@@ -242,4 +290,5 @@
 
   <script type="module" src="/public/assets/js/pages/recommendations.js"></script>
 </body>
+
 </html>

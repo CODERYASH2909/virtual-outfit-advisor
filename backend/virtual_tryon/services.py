@@ -232,7 +232,7 @@ def prepare_clean_garment(garment_image_path: str, garment_name: str) -> str:
     if not garment_image_path or not os.path.exists(garment_image_path):
         return garment_image_path
 
-    if "wardrobe" in garment_image_path and "clean" in garment_image_path and garment_image_path.lower().endswith(".png"):
+    if ("wardrobe" in garment_image_path or "clean" in garment_image_path) and garment_image_path.lower().endswith(".png"):
         logger.info("Reusing pre-cleaned wardrobe garment image: %s", garment_image_path)
         return garment_image_path
 
